@@ -1,0 +1,29 @@
+{% embed 'layouts/admin.twig' %}
+    {% block title %}
+        Edit
+    {% endblock %}
+
+    {% block body %}
+        <h1>{{ table_name }}</h1>
+        {{ validation_errors() }}
+        {% if message is defined %}
+            <p>{{ message }}</p>
+        {% endif %}
+        {% if data %}
+            {% set action = (data.id != '') ? 'Editing:' : 'Creating new' %}
+            <h2>{{ action }} {{ resource }} {{ attribute(data, heading) }}</h2>
+            {% if not multi is defined %}
+                {% set multi = false %}
+            {% endif %}
+            {{ multi }}
+            {{ form_edit("#{base_url}#{resource}/#{data.id}", method, field_data, data, multi) }}
+            {% if method == 'put' %}
+            {{ form_delete("#{base_url}#{resource}/#{data.id}", resource, data.id) }}
+            {% endif %}
+        {% else %}
+            <p>{{ resource }} not found</p>
+        {% endif %}
+        <p>{{ link_to("#{base_url}#{resource}", "Back to #{table_name}") }}</p>
+        <p>{{ link_to("#{base_url}", 'Back to Dashboard') }}</p>
+    {% endblock %}
+{% endembed %}

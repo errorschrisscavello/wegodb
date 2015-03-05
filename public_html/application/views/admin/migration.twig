@@ -1,0 +1,9 @@
+{% extends 'layouts/admin.twig' %}
+{% block title %}
+    Migration
+{% endblock %}
+
+{% block body %}
+    <p>{{ "Migration Version #{version}: #{message}" }}</p>
+    <p>{{ link_to("#{base_url}", 'Back to Dashboard') }}</p>
+{% endblock %}

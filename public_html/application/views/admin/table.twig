@@ -1,0 +1,37 @@
+{% extends 'layouts/admin.twig' %}
+{% block title %}
+    Table
+{% endblock %}
+
+{% block body %}
+    <h1>{{ table_name }}</h1>
+    {{ validation_errors() }}
+    {% if message is defined %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <p>{{ link_new("#{base_url}#{resource}", "New #{resource}") }}</p>
+    <table>
+        {% set i = 0 %}
+        {% for row in table %}
+            {% set row = row|to_array %}
+            {% if i == 0 %}
+                <tr>
+                    <th></th>
+                    <th></th>
+                    {% for key, value in row %}
+                        <th>{{ key }}</th>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+            <tr>
+                <td>{{ link_to("#{base_url}#{resource}/#{row.id}", 'Edit') }}</td>
+                <td>{{ form_delete("#{base_url}#{resource}/#{row.id}", resource, row.id) }}</td>
+                {% for key, value in row %}
+                    <td>{{ value|raw }}</td>
+                {% endfor %}
+            </tr>
+            {% set i = i + 1 %}
+        {% endfor %}
+    </table>
+    <p>{{ link_to("#{base_url}", 'Back to Dashboard') }}</p>
+{% endblock %}

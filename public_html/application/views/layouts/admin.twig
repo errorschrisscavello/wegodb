@@ -1,0 +1,11 @@
+{% extends 'layouts/base.twig' %}
+{% block head %}
+    <meta name="csrf_token_name" content="{{ csrf_token_name }}"/>
+    <meta name="csrf_hash" content="{{ csrf_hash }}"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+{% endblock %}
+
+{% block foot %}
+    <script src="{{ "#{js_url}main.js" }}"></script>
+{% endblock %}
