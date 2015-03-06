@@ -43,12 +43,12 @@ class Auth
     {
         $user = $this->get_user_by_identity($email)->result()[0];
         ob_start();
-        $this->ci->load->library('form');
+        $this->ci->load->helper('form');
         ?>
         <form action="<?php echo base_url('user/send_activation'); ?>" method="post">
             <input name="email" type="hidden" value="<?php echo $user->email; ?>"/>
             <input name="username" type="hidden" value="<?php echo $user->username; ?>"/>
-            <?php echo $this->ci->form->csrf(); ?>
+            <?php echo form_csrf(); ?>
             <input type="submit" value="Resend activation email"/>
         </form>
         <?php

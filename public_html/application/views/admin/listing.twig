@@ -1,10 +1,10 @@
 {% extends 'layouts/admin.twig' %}
-
 {% block title %}
     | {{ title }}
 {% endblock %}
 
 {% block content %}
     <h1>{{ heading }}</h1>
-        {{ form|raw }}
+    {{ new|raw }}
+    {{ listing|raw }}
 {% endblock %}

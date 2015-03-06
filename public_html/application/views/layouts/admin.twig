@@ -1,9 +1,33 @@
 {% extends 'layouts/base.twig' %}
+
+{% block title %}
+| {{ title }}
+{% endblock %}
+
 {% block head %}
     <meta name="csrf_token_name" content="{{ csrf_token_name }}"/>
     <meta name="csrf_hash" content="{{ csrf_hash }}"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+{% endblock %}
+
+{% block header %}
+    <nav>
+        {{ link_to("#{base_url}user", 'Users') }}
+        {{ link_to("#{base_url}app", 'Apps') }}
+        {{ link_to("#{base_url}app_table", 'App Tables') }}
+        {{ link_to("#{base_url}app_column", 'App Columns') }}
+        {{ link_to("#{base_url}", 'WegoDB') }}
+        {{ link_to("#{base_url}migrate", 'Migrate') }}
+        {{ link_myaccount() }}
+        {{ link_to("#{base_url}logout", 'Logout') }}
+    </nav>
+    <div>
+        {{ validation_errors() }}
+        {% if message is defined %}
+            <p>{{ message }}</p>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block foot %}

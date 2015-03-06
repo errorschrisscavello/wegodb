@@ -4,24 +4,26 @@ class app_table extends MY_Controller
 {
     public $model = 'app_table_m';
     public $load_model = TRUE;
-    public $messages = array();
+    public $message = '';
+    public $errors = array();
     public $rules = array(
         array(
             'field'=>'name',
             'label'=>'Name',
-            'rules'=>'trim|required|min_length[1]|max_length[32]|alpha'
+            'rules'=>'trim|required|min_length[1]|max_length[32]|callback_valid_name'
         )
     );
 
-    public function table($message = FALSE)
+    public function listing()
     {
-        $app_tables = $this->app_table_m->get();
-        $this->twig->render('admin/table.twig', array(
-            'title'=>'Listing Apps',
-            'message'=>$message,
+        $listing = $this->app_table_m->listing();
+        $this->twig->render('admin/listing.twig', array(
+            'title'=>'Listing App Tables',
+            'heading'=>'App Tables',
             'resource'=>'app_table',
-            'table_name'=>'App Tables',
-            'table'=>$app_tables
+            'message'=>$this->message,
+            'listing'=>$listing,
+            'new'=>anchor(base_url('app_table?new=1'), 'New app table')
         ));
     }
 
@@ -29,35 +31,43 @@ class app_table extends MY_Controller
     {
         $this->form_validation->set_rules($this->rules);
         $create = $this->form_validation->run();
-        $message = ($create) ? 'App Table created with ID: ' . $this->app_table_m->create($this->app_table_m->prep()) : $create;
-        $this->table($message);
+        if($create)
+        {
+            $this->message = 'App Table created with ID: ' . $this->app_table_m->create();
+            $this->listing();
+        }else{
+            $this->read(FALSE, TRUE);
+        }
     }
 
-    public function read($id = FALSE)
+    public function read($id = FALSE, $new = FALSE)
     {
-        if($id || create_new())
+        $create_new = create_new() || $new;
+        if($id || $create_new)
         {
-            $data = (create_new()) ? $this->app_table_m->get_new() : $this->app_table_m->get_where($id);
-            $method = (create_new()) ? 'post' : 'put';
+            $form = $this->app_table_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App Table',
-                'table_name'=>'App Tables',
+                'heading'=>'App Tables',
                 'resource'=>'app_table',
-                'heading'=>'name',
-                'method'=>$method,
-                'field_data'=>$this->app_table_m->field_data(),
-                'data'=>$data
+                'form'=>$form
             ));
         }else{
-            $this->table();
+            $this->listing();
         }
     }
 
     public function update($id = FALSE)
     {
-        $update = TRUE;
-        $message = ($update) ? 'App Table updated! Affected rows: ' . $this->app_table_m->update($id, $this->app_table_m->prep()) : $update;
-        $this->table($message);
+        $this->form_validation->set_rules($this->rules);
+        $update = $this->form_validation->run();
+        if($update)
+        {
+            $this->message = ($update) ? 'App Table updated! Affected rows: ' . $this->app_table_m->update($id) : $update;
+            $this->listing();
+        }else{
+            $this->read($id);
+        }
     }
 
     public function delete($id = FALSE)
@@ -70,13 +80,56 @@ class app_table extends MY_Controller
             )
         ));
         $delete = $this->form_validation->run();
-        $message = ($delete) ? 'App Table deleted! Affected rows: ' . $this->app_table_m->delete($id, $this->app_table_m->prep()) : $delete;
-        $this->table($message);
+        $this->message = ($delete) ? 'App Table deleted! Affected rows: ' . $this->app_table_m->delete($id) : $delete;
+        $this->listing();
+    }
+
+    public function valid_name($str)
+    {
+        $first_char = substr($str, 0, 1);
+        if($is_number_first_char = preg_match("/\d/", $first_char))
+        {
+            $this->form_validation->set_message('valid_name', 'Table name cannot begin with a number');
+            return FALSE;
+        }
+        if($has_illegal_chars = preg_match_all("/[^0-9a-zA-Z_]/", $str)){
+            $this->form_validation->set_message('valid_name', 'Table name cannot characters other than letters, numbers, or underscores');
+            return FALSE;
+        }
+        $app_id = $this->input->post('app');
+        $ci =& get_instance();
+        $ci->load->model('app_m');
+        $app = $ci->app_m->get_where($app_id);
+        $app_tables = $this->app_table_m->get_all_where('app_id', $app_id);
+        $count = 0;
+        if($app_tables)
+        {
+            foreach($app_tables as $app_table)
+            {
+                if($app_table->name == $str)
+                {
+                    $count++;
+                }
+            }
+            if($count > 0)
+            {
+                $this->form_validation->set_message('valid_name', 'Column "' . $str . '" already exists on table "' . $app->name . '"');
+                return FALSE;
+            }
+        }
+        return TRUE;
     }
 
     public function can_delete($str)
     {
-        //TODO deny if app table has rows
+        $ci =& get_instance();
+        $ci->load->model('app_column_m');
+        $app_columns = $ci->app_column_m->get_all_where('app_table_id', $str);
+        if($app_columns)
+        {
+            $this->form_validation->set_message('can_delete', 'Cannot delete table with existing columns');
+            return FALSE;
+        }
         return TRUE;
     }
 }

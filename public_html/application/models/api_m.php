@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_m extends MY_Model
+class api_m extends MY_Model
 {
     public function create()
     {
@@ -9,7 +9,7 @@ class app_m extends MY_Model
 
     public function read()
     {
-        //TODO return 1 or more resources
+        //TODO read 1 or more resources
     }
 
     public function update()
@@ -20,5 +20,6 @@ class app_m extends MY_Model
     public function delete()
     {
         //TODO move 1 or more resources to trash
+        //TODO create trash table
     }
 }

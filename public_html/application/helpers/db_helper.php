@@ -1,10 +1,24 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-if( ! function_exists('linked_db_name'))
+if( ! function_exists('linked_table_name'))
 {
-    function linked_db_name($id)
+    function linked_table_name($app_table)
     {
-        $id = is_object($id) ? $id->id : $id;
-        return '_' . $id;
+        return 'app' . $app_table->app_id . '_table' . $app_table->id;
+    }
+}
+
+if( ! function_exists('get_field'))
+{
+    function get_field($name, $field_data)
+    {
+        foreach($field_data as $field)
+        {
+            if($field->name == $name)
+            {
+                return $field;
+            }
+        }
+        return FALSE;
     }
 }

@@ -79,18 +79,34 @@ class WegoTwig extends Twig_Extension
     {
         $this->ci->load->helper('form');
         $this->ci->load->library('form_validation');
+        $this->ci->load->library('auth');
 
         $html_safe = array('is_safe'=>array('html'));
 
         return array(
-            'form_delete'=>new Twig_SimpleFunction('form_delete', function($action, $resource, $id)
-            {
-                return $this->ci->form->delete($action, $resource, $id);
-            }, $html_safe),
-
             'form_edit'=>new Twig_SimpleFunction('form_edit', function($action, $method, $field_data, $data, $multi = FALSE)
             {
-                return $this->ci->form->edit($action, $method, $field_data, $data, $multi);
+                return form_edit($action, $method, $field_data, $data, $multi);
+            }, $html_safe),
+
+            'form_delete'=>new Twig_SimpleFunction('form_delete', function($action, $resource, $id)
+            {
+                return form_delete($action, $resource, $id);
+            }, $html_safe),
+
+            'user'=>new Twig_SimpleFunction('user', function()
+            {
+                return $this->ci->auth->current();
+            }),
+
+            'link_myaccount'=>new Twig_SimpleFunction('link_myaccount', function()
+            {
+                $user = $this->ci->auth->current();
+                $id = $this->ci->auth->get_user_by_identity($user)->result()[0]->id;
+                $href = base_url('user/' . $id);
+                $attr = '';
+                $text = 'My Account';
+                return '<a href="' . $href . '"' . $attr . '>' . $text . '</a>';
             }, $html_safe),
 
             'link_to'=>new Twig_SimpleFunction('link_to', function($href, $text, $attributes = array())

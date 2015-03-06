@@ -2,6 +2,11 @@
 
 class admin extends MY_Controller
 {
+    public $model = 'admin_m';
+    public $load_model = TRUE;
+    public $message = '';
+    public $errors = array();
+
     public $rules = array(
         array(
             'field'=>'user',
@@ -36,7 +41,7 @@ class admin extends MY_Controller
             redirect('dashboard');
         }else{
             $this->twig->render('public/login.twig', array(
-                'user'=>$this->input->post('user')
+                'form'=>$this->admin_m->form()
             ));
         }
     }

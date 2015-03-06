@@ -4,24 +4,28 @@ class app extends MY_Controller
 {
     public $model = 'app_m';
     public $load_model = TRUE;
-    public $messages = array();
+    public $message = '';
+    public $errors = array(
+        'is_unique'=>'{field} is already used for an existing app'
+    );
     public $rules = array(
         array(
             'field'=>'name',
             'label'=>'Name',
-            'rules'=>'trim|required|min_length[1]|max_length[32]|alpha'
+            'rules'=>'trim|required|min_length[1]|max_length[32]|is_unique[apps.name]|alpha_dash'
         )
     );
 
-    public function table($message = FALSE)
+    public function listing()
     {
-        $apps = $this->app_m->get();
-        $this->twig->render('admin/table.twig', array(
+        $listing = $this->app_m->listing();
+        $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing Apps',
-            'message'=>$message,
+            'heading'=>'Apps',
             'resource'=>'app',
-            'table_name'=>'Apps',
-            'table'=>$apps
+            'message'=>$this->message,
+            'listing'=>$listing,
+            'new'=>anchor(base_url('app?new=1'), 'New app')
         ));
     }
 
@@ -29,35 +33,43 @@ class app extends MY_Controller
     {
         $this->form_validation->set_rules($this->rules);
         $create = $this->form_validation->run();
-        $message = ($create) ? 'App created with ID: ' . $this->app_m->create($this->app_m->prep()) : $create;
-        $this->table($message);
+        if($create)
+        {
+            $this->message = 'App created with ID: ' . $this->app_m->create();
+            $this->listing();
+        }else{
+            $this->read(FALSE, TRUE);
+        }
     }
 
-    public function read($id = FALSE)
+    public function read($id = FALSE, $new = FALSE)
     {
-        if($id || create_new())
+        $create_new = create_new() || $new;
+        if($id || $create_new)
         {
-            $data = (create_new()) ? $this->app_m->get_new() : $this->app_m->get_where($id);
-            $method = (create_new()) ? 'post' : 'put';
+            $form = $this->app_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App',
-                'table_name'=>'Apps',
+                'heading'=>'Apps',
                 'resource'=>'app',
-                'heading'=>'name',
-                'method'=>$method,
-                'field_data'=>$this->app_m->field_data(),
-                'data'=>$data
+                'form'=>$form
             ));
         }else{
-            $this->table();
+            $this->listing();
         }
     }
 
     public function update($id = FALSE)
     {
-        $update = TRUE;
-        $message = ($update) ? 'App updated! Affected rows: ' . $this->app_m->update($id, $this->app_m->prep()) : $update;
-        $this->table($message);
+        $this->form_validation->set_rules($this->rules);
+        $update = $this->form_validation->run();
+        if($update)
+        {
+            $this->message = ($update) ? 'App updated! Affected rows: ' . $this->app_m->update($id) : $update;
+            $this->listing();
+        }else{
+            $this->read($id);
+        }
     }
 
     public function delete($id = FALSE)
@@ -70,13 +82,20 @@ class app extends MY_Controller
             )
         ));
         $delete = $this->form_validation->run();
-        $message = ($delete) ? 'App deleted! Affected rows: ' . $this->app_m->delete($id, $this->app_m->prep()) : $delete;
-        $this->table($message);
+        $this->message = ($delete) ? 'App deleted! Affected rows: ' . $this->app_m->delete($id) : $delete;
+        $this->listing();
     }
 
     public function can_delete($str)
     {
-        //TODO deny if app has attached tables
+        $ci =& get_instance();
+        $ci->load->model('app_table_m');
+        $app_tables = $ci->app_table_m->get_all_where('app_id', $str);
+        if($app_tables)
+        {
+            $this->form_validation->set_message('can_delete', 'Cannot delete app with existing tables');
+            return FALSE;
+        }
         return TRUE;
     }
 }

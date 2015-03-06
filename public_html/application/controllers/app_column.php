@@ -4,67 +4,73 @@ class app_column extends MY_Controller
 {
     public $model = 'app_column_m';
     public $load_model = TRUE;
-    public $messages = array();
+    public $message = '';
+    public $errors = array();
     public $rules = array(
         array(
-            'field'=>'table',
-            'label'=>'Table',
-            'rules'=>'trim|required'
+            'field'=>'name',
+            'label'=>'Column Name',
+            'rules'=>'trim|required|callback_valid_name'
         ),
         array(
             'field'=>'type',
             'label'=>'Type',
             'rules'=>'trim|required'
+        ),
+        array(
+            'field'=>'table',
+            'label'=>'Table',
+            'rules'=>'trim|required'
         )
     );
 
-    public function table($message = FALSE)
+    public function listing($message = FALSE)
     {
-        $app_columns = $this->app_column_m->get();
-        $this->twig->render('admin/table.twig', array(
-            'title'=>'Listing Apps',
-            'message'=>$message,
+        $listing = $this->app_column_m->listing();
+        $this->twig->render('admin/listing.twig', array(
+            'title'=>'Listing App Columns',
+            'heading'=>'App Columns',
             'resource'=>'app_column',
-            'table_name'=>'App Columns',
-            'table'=>$app_columns
+            'message'=>$this->message,
+            'listing'=>$listing,
+            'new'=>anchor(base_url('app_column?new=1'), 'New app column')
         ));
     }
 
     public function create()
     {
-        //TODO check if column name exists before creation
         $this->form_validation->set_rules($this->rules);
         $create = $this->form_validation->run();
-        $message = ($create) ? 'App Column created: ' . $this->app_column_m->create($this->app_column_m->prep()) : $create;
-        $this->table($message);
+        if($create)
+        {
+            $this->message = 'App Column created with ID: ' . $this->app_column_m->create();
+            $this->listing();
+        }else{
+            $this->read(FALSE, TRUE);
+        }
     }
 
-    public function read($id = FALSE)
+    public function read($id = FALSE, $new = FALSE)
     {
-        if($id || create_new())
+        $create_new = create_new() || $new;
+        if($id || $create_new)
         {
-            $data = (create_new()) ? $this->app_column_m->get_new() : $this->app_column_m->get_where($id);
-            $method = (create_new()) ? 'post' : 'put';
+            $form = $this->app_column_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App Column',
-                'table_name'=>'App Columns',
+                'heading'=>'App Columns',
                 'resource'=>'app_column',
-                'heading'=>'name',
-                'method'=>$method,
-                'field_data'=>$this->app_column_m->field_data(),
-                'data'=>$data,
-                'multi'=>($id) ? TRUE : FALSE
+                'form'=>$form
             ));
         }else{
-            $this->table();
+            $this->listing();
         }
     }
 
     public function update($id = FALSE)
     {
-        $update = TRUE;
-        $message = ($update) ? 'App Column updated! Affected rows: ' . $this->app_column_m->update($id, $this->app_column_m->prep()) : $update;
-        $this->table($message);
+        $this->message = 'App Columns may not be updated, only deleted';
+        $this->listing();
     }
 
     public function delete($id = FALSE)
@@ -77,13 +83,47 @@ class app_column extends MY_Controller
             )
         ));
         $delete = $this->form_validation->run();
-        $message = ($delete) ? 'App Column deleted! Affected rows: ' . $this->app_column_m->delete($id, $this->app_column_m->prep()) : $delete;
-        $this->table($message);
+        $this->message = ($delete) ? 'App Column deleted! Affected rows: ' . $this->app_column_m->delete($id) : $delete;
+        $this->listing();
+    }
+
+    public function valid_name($str)
+    {
+        $first_char = substr($str, 0, 1);
+        if($is_number_first_char = preg_match("/\d/", $first_char))
+        {
+            $this->form_validation->set_message('valid_name', 'Table name cannot begin with a number');
+            return FALSE;
+        }
+        if($has_illegal_chars = preg_match_all("/[^0-9a-zA-Z_]/", $str)){
+            $this->form_validation->set_message('valid_name', 'Table name cannot characters other than letters, numbers, or underscores');
+            return FALSE;
+        }
+        $app_table_id = $this->input->post('table');
+        $ci =& get_instance();
+        $ci->load->model('app_table_m');
+        $app_table = $ci->app_table_m->get_where($app_table_id);
+        $link_name = linked_table_name($app_table);
+        if($ci->db->field_exists($str, $link_name))
+        {
+            $this->form_validation->set_message('valid_name', 'Column "' . $str . '" already exists on table "' . $app_table->name . '"');
+            return FALSE;
+        }
+        return TRUE;
     }
 
     public function can_delete($str)
     {
-        //TODO deny if app column has rows
+        $column = $this->app_column_m->get_where($str);
+        $ci =& get_instance();
+        $ci->load->model('app_table_m');
+        $app_table = $ci->app_table_m->get_where($column->app_table_id);
+        $num_rows = $this->app_column_m->get_num_rows($app_table);
+        if($num_rows != 0)
+        {
+            $this->form_validation->set_message('can_delete', 'Cannot delete column on table with existing rows');
+            return FALSE;
+        }
         return TRUE;
     }
 }

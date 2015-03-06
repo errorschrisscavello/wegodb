@@ -4,12 +4,24 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-        <title>{% block title %}Wego DB{% endblock %}</title>
+        <title>Wego DB {% block title %}{% endblock %}</title>
 
         {% block head %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <header>
+                {% block header %}{% endblock %}
+            </header>
+
+            <section>
+                {% block content %}{% endblock %}
+            </section>
+
+            <footer>
+                {% block footer %}{% endblock %}
+            </footer>
+        {% endblock %}
         {% block foot %}{% endblock %}
     </body>
 </html>

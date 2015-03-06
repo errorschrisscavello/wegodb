@@ -1,17 +1,8 @@
 {% extends 'layouts/admin.twig' %}
 {% block title %}
-    Dashboard
+    | Dashboard
 {% endblock %}
 
-{% block body %}
-    <h1>Dashboard</h1>
-    {% if message is defined %}
-        <p>{{ message }}</p>
-    {% endif %}
-    <p>{{ link_to("#{base_url}user", 'Users') }}</p>
-    <p>{{ link_to("#{base_url}app", 'Apps') }}</p>
-    <p>{{ link_to("#{base_url}app_table", 'App Tables') }}</p>
-    <p>{{ link_to("#{base_url}app_column", 'App Columns') }}</p>
-    <p>{{ link_to("#{base_url}migrate", 'Migrate') }}</p>
-    <p>{{ link_to("#{base_url}logout", 'Logout') }}</p>
+{% block content %}
+    <h1>Welcome to WegoDB {{ user() }}!</h1>
 {% endblock %}

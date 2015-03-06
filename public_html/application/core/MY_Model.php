@@ -11,18 +11,33 @@ class MY_Model extends CI_Model
         return (count($result) > 0) ? $result : FALSE;
     }
 
-    public function get_where($id)
+    public function get_where($id, $value = FALSE)
     {
         $this->db->select('*');
-        $this->db->where('id', $id);
+        if($value)
+        {
+            $field = $id;
+            $this->db->where($field, $value);
+        }else{
+            $this->db->where('id', $id);
+        }
         $this->db->limit(1);
         $result = $this->get();
-        return ($result) ? $result[0] : $result;
+        return ($result) ? $result[0] : FALSE;
+    }
+
+    public function get_all_where($key, $value)
+    {
+        $this->db->select('*');
+        $field = $key;
+        $this->db->where($field, $value);
+        $result = $this->get();
+        return (count($result) > 0) ? $result : FALSE;
     }
 
     public function get_new()
     {
-        $field_data = $this->field_data();
+        $field_data = $this->db->field_data($this->table);
         $new = new stdClass();
         foreach($field_data as $field)
         {
@@ -32,14 +47,16 @@ class MY_Model extends CI_Model
         return $new;
     }
 
-    public function create($data)
+    public function create()
     {
+        $data = $this->filter_post();
         $this->db->insert($this->table, $data);
         return $this->db->insert_id();
     }
 
-    public function update($id, $data)
+    public function update($id)
     {
+        $data = $this->filter_post();
         $this->db->where('id', $id);
         $this->db->update($this->table, $data);
         return $this->db->affected_rows();
@@ -52,17 +69,18 @@ class MY_Model extends CI_Model
         return $this->db->affected_rows();
     }
 
-    public function field_data()
+    //TODO best method for form binding?
+
+    public function form($id = FALSE, $new = FALSE)
     {
-        $field_data = $this->db->field_data($this->table);
-        foreach($field_data as $field)
-        {
-            $field->input = 'text';
-        }
-        return $field_data;
+        return '';
+    }
+    public function listing()
+    {
+        return '';
     }
 
-    public function prep()
+    public function filter_post()
     {
         $data = array();
         $post_filter = $this->post_filter;
@@ -74,25 +92,5 @@ class MY_Model extends CI_Model
             }
         }
         return $data;
-    }
-
-    public function sort_fields($fields, $order)
-    {
-        $ordered = array();
-        if( ! in_array('id', $order))
-        {
-            $order = array_merge(array('id'), $order);
-        }
-        foreach($order as $field_name)
-        {
-            foreach($fields as $field)
-            {
-                if($field_name == $field->name)
-                {
-                    $ordered[] = $field;
-                }
-            }
-        }
-        return $ordered;
     }
 }

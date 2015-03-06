@@ -67,8 +67,7 @@ $autoload['libraries'] = array(
     'session',
 
     'auth',
-    'twig',
-    'form'
+    'twig'
 );
 
 
@@ -98,8 +97,9 @@ $autoload['drivers'] = array();
 */
 
 $autoload['helper'] = array(
-    'db',
     'url',
+
+    'db',
     'rest',
     'dump'
 );

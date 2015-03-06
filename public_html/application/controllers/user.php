@@ -4,10 +4,16 @@ class user extends MY_Controller
 {
     public $model = 'user_m';
     public $load_model = TRUE;
-    public $messages = array(
+    public $message = '';
+    public $errors = array(
         'is_unique'=>'{field} already exists'
     );
     public $rules = array(
+        array(
+            'field'=>'username',
+            'label'=>'Username',
+            'rules'=>'trim|required|min_length[8]|max_length[32]|is_unique[users.username]|alpha_dash'
+        ),
         array(
             'field'=>'email',
             'label'=>'Email',
@@ -19,14 +25,9 @@ class user extends MY_Controller
             'rules'=>'trim|required|matches[email]'
         ),
         array(
-            'field'=>'username',
-            'label'=>'Username',
-            'rules'=>'trim|required|min_length[8]|max_length[32]|is_unique[users.username]|alpha_numeric'
-        ),
-        array(
             'field'=>'new_password',
             'label'=>'New Password',
-            'rules'=>'trim|required|min_length[8]|max_length[32]|alpha_numeric'
+            'rules'=>'trim|required|min_length[8]|max_length[32]|alpha_dash'
         ),
         array(
             'field'=>'confirm_password',
@@ -35,24 +36,16 @@ class user extends MY_Controller
         )
     );
 
-    public function table($message = FALSE)
+    public function listing()
     {
-        $users = $this->user_m->get();
-        foreach($users as $user)
-        {
-            if( ! (bool)$user->active)
-            {
-                $user->active = $this->auth->activation_form($user->email);
-            }else{
-                $user->active = 'true';
-            }
-        }
-        $this->twig->render('admin/table.twig', array(
+        $listing = $this->user_m->listing();
+        $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing Users',
-            'message'=>$message,
+            'heading'=>'Users',
             'resource'=>'user',
-            'table_name'=>'Users',
-            'table'=>$users
+            'message'=>$this->message,
+            'listing'=>$listing,
+            'new'=>anchor(base_url('user?new=1'), 'New user')
         ));
     }
 
@@ -60,41 +53,45 @@ class user extends MY_Controller
     {
         $this->form_validation->set_rules($this->rules);
         $create = $this->form_validation->run();
-        $message = FALSE;
         if($create)
         {
-            $message = 'User created with ID: ' . $this->user_m->create($this->user_m->prep());
-            $message .= ' Check your email for an activation link!';
+            $this->message = 'User created with ID: ' . $this->user_m->create();
+            $this->message .= ' Check your email for an activation link!';
             $this->send_activation_email();
+            $this->listing();
+        }else{
+            $this->read(FALSE, TRUE);
         }
-        $this->table($message);
     }
 
-    public function read($id = FALSE)
+    public function read($id = FALSE, $new = FALSE)
     {
-        if($id || create_new())
+        $create_new = create_new() || $new;
+        if($id || $create_new)
         {
-            $data = (create_new()) ? $this->user_m->get_new() : $this->user_m->get_where($id);
-            $method = (create_new()) ? 'post' : 'put';
+            $form = $this->user_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit User',
-                'table_name'=>'Users',
+                'heading'=>'Users',
                 'resource'=>'user',
-                'heading'=>'email',
-                'method'=>$method,
-                'field_data'=>$this->user_m->field_data(),
-                'data'=>$data
+                'form'=>$form,
+                'nav'=>anchor(base_url('user'), 'Back to Users')
             ));
         }else{
-            $this->table();
+            $this->listing();
         }
     }
 
     public function update($id = FALSE)
     {
         $update = $this->can_update($id);
-        $message = ($update) ? 'User updated! Affected rows: ' . $this->user_m->update($id, $this->user_m->prep()) : $update;
-        $this->table($message);
+        if($update)
+        {
+            $this->message = ($update) ? 'User updated! Affected rows: ' . $this->user_m->update($id) : $update;
+            $this->listing();
+        }else{
+            $this->read($id);
+        }
     }
 
     public function delete($id = FALSE)
@@ -107,34 +104,36 @@ class user extends MY_Controller
             )
         ));
         $delete = $this->form_validation->run();
-        $message = ($delete) ? 'User deleted! Affected rows: ' . $this->user_m->delete($id, $this->user_m->prep()) : $delete;
-        $this->table($message);
+        $this->message = ($delete) ? 'User deleted! Affected rows: ' . $this->user_m->delete($id) : $delete;
+        $this->listing();
     }
 
     public function activate()
     {
         $token = $this->input->get('token');
         $email = $this->input->get('email');
-        $message = 'User not activated, resend activation email?';
-        $message .= $this->auth->activation_form(urldecode($email));
+        $this->message = 'User not activated, resend activation email?';
+        $this->message .= $this->auth->activation_form(urldecode($email));
         if($this->auth->user_exists($email))
         {
             if($this->auth->validate_activation($token, $email))
             {
                 $this->auth->activate($email);
-                $message = 'User activated!';
+                $this->message = 'User activated!';
             }
         }
+        $this->load->model('admin_m');
         $this->twig->render('public/login.twig', array(
-            'message'=>$message,
-            'user'=>$this->input->post('user')
+            'message'=>$this->message,
+            'form'=>$this->admin_m->form()
         ));
     }
 
     public function resend_activation()
     {
         $this->send_activation_email();
-        $this->table('Activation email sent');
+        $this->message = 'Activation email sent';
+        $this->listing();
     }
 
     public function send_activation_email()

@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Add_app_tables extends CI_Migration
+class Migration_Add_app_columns extends CI_Migration
 {
 
     public function up()
@@ -16,17 +16,17 @@ class Migration_Add_app_tables extends CI_Migration
                 'type'=>'VARCHAR',
                 'constraint'=>'255'
             ),
-            'app_id'=>array(
+            'app_table_id'=>array(
                 'type'=>'INT',
                 'constraint'=>11
             )
         ));
         $this->dbforge->add_key('id', TRUE);
-        $this->dbforge->create_table('app_tables');
+        $this->dbforge->create_table('app_columns');
     }
 
     public function down()
     {
-        $this->dbforge->drop_table('app_tables');
+        $this->dbforge->drop_table('app_columns');
     }
 }

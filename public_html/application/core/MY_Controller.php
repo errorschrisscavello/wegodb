@@ -6,7 +6,8 @@ class MY_Controller extends CI_Controller
     public $load_model = FALSE;
     public $app_access = FALSE;
     public $rules = array();
-    public $messages = array();
+    public $message = '';
+    public $errors = array();
     public $public_uris = array(
         'error',
         'login',
@@ -27,9 +28,9 @@ class MY_Controller extends CI_Controller
 
         if($allowed_uri || $valid_session && ! $is_api_request)
         {
-            if(count($this->messages) > 0)
+            if(count($this->errors) > 0)
             {
-                $this->set_messages();
+                $this->set_errors();
             }
 
             if($this->load_model)
@@ -77,13 +78,13 @@ class MY_Controller extends CI_Controller
         }
     }
 
-    public function set_messages()
+    public function set_errors()
     {
         $this->load->library('form_validation');
 
-        foreach($this->messages as $func => $message)
+        foreach($this->errors as $func => $error)
         {
-            $this->form_validation->set_message($func, $message);
+            $this->form_validation->set_message($func, $error);
         }
     }
 }
