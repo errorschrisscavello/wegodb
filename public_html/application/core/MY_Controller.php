@@ -9,6 +9,8 @@ class MY_Controller extends CI_Controller
     public $message = '';
     public $errors = array();
     public $public_uris = array(
+        'api/invalid',
+        'api/csrf',
         'error',
         'login',
         'logout'
@@ -18,7 +20,7 @@ class MY_Controller extends CI_Controller
     {
         parent::__construct();
         $valid_session = FALSE;
-        $allowed_uri = in_array($this->uri->segment(1), $this->public_uris);
+        $allowed_uri = in_array(uri_string(), $this->public_uris);
         if( ! $allowed_uri)
         {
             $valid_session = $this->auth->validate_session();
@@ -42,7 +44,7 @@ class MY_Controller extends CI_Controller
             if( ! $this->auth->validate_api())
             {
                 //TODO send error message to api controller
-                redirect('error');
+                redirect('api/invalid');
             }
         }else{
             redirect('login');

@@ -5,16 +5,56 @@ class api extends MY_Controller
     public $model = 'api_m';
     public $load_model = TRUE;
     public $message = '';
+    public $status = '';
+    public $data = array();
 
     public function index($id = FALSE)
     {
-        $this->message = 'API index';
-        echo $this->message;
+        $this->status = 'success';
+        $this->message = 'You have reached the WegoDB API Index';
+        if(isset($_POST['action']))
+        {
+            if(isset($_POST['data']))
+            {
+                $_POST['data'] = json_decode($_POST['data']);
+            }
+            $this->api_m->data = $_POST;
+            if($action = $this->api_m->action())
+            {
+                $this->message = $action;
+            }else{
+                $this->message = 'That action does not exist';
+            }
+        }
+        $this->response();
     }
 
-    public function error()
+    public function csrf()
     {
-        $this->message = 'Error: invalid API credentials';
-        echo $this->message;
+        $this->status = 'success';
+        $this->message = 'WegoDB CSRF token';
+        $this->data = $this->auth->csrf();
+        $this->response();
+    }
+
+    public function invalid()
+    {
+        $this->error('Invalid API credentials');
+    }
+
+    public function error($message = FALSE)
+    {
+        $this->status = 'error';
+        $this->message = ($message) ? $message : 'An unknown error occurred';
+        $this->response();
+    }
+
+    public function response()
+    {
+        $response = new stdClass();
+        $response->data = $this->data;
+        $response->message = $this->message;
+        $response->status = $this->status;
+        echo json_encode($response);
     }
 }

@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_m extends MY_Model
+class app_row_m extends MY_Model
 {
     public $app_m;
     public $app_table_m;
@@ -27,30 +27,6 @@ class app_m extends MY_Model
     public function listing()
     {
         //TODO return list of rows for table
-        return '';
-    }
-
-    public function filter_post()
-    {
-        //TODO return dynamic post filtered data
-        return array();
-    }
-
-    public function create()
-    {
-        //TODO create new row
-        return '';
-    }
-
-    public function update($id)
-    {
-        //TODO update row by id
-        return '';
-    }
-
-    public function delete($id)
-    {
-        //TODO delete row by id
         return '';
     }
 }

@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app extends MY_Controller
+class app_row extends MY_Controller
 {
     public $model = 'app_row_m';
     public $load_model = TRUE;
