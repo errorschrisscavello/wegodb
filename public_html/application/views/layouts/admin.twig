@@ -7,8 +7,6 @@
 {% block head %}
     <meta name="csrf_token_name" content="{{ csrf_token_name }}"/>
     <meta name="csrf_hash" content="{{ csrf_hash }}"/>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 {% endblock %}
 
 {% block header %}
@@ -17,6 +15,8 @@
         {{ link_to("#{base_url}app", 'Apps') }}
         {{ link_to("#{base_url}app_table", 'App Tables') }}
         {{ link_to("#{base_url}app_column", 'App Columns') }}
+        {{ link_to("#{base_url}app_row", 'App Rows') }}
+        {{ link_to("#{base_url}trash", 'Trash') }}
         {{ link_to("#{base_url}", 'WegoDB') }}
         {{ link_to("#{base_url}migrate", 'Migrate') }}
         {{ link_myaccount() }}
@@ -28,8 +28,4 @@
             <p>{{ message }}</p>
         {% endif %}
     </div>
-{% endblock %}
-
-{% block foot %}
-    <script src="{{ "#{js_url}main.js" }}"></script>
 {% endblock %}

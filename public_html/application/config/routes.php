@@ -77,6 +77,12 @@ $route['app_table/(:num)'] = 'app_table/index/$1';
 $route['app_column'] = 'app_column';
 $route['app_column/(:num)'] = 'app_column/index/$1';
 
+$route['app_row'] = 'app_row';
+$route['app_row/(:num)'] = 'app_row/index/$1';
+
+$route['trash'] = 'trash';
+$route['trash/(:num)'] = 'trash/index/$1';
+
 //API
 $route['api'] = 'api';
 $route['api/invalid'] = 'api/invalid';

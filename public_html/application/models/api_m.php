@@ -181,12 +181,7 @@ class api_m extends MY_Model
                     $result = ($result) ? $result[0] : FALSE;
                     if($result)
                     {
-                        $serialized = serialize($result);
-                        $data = array(
-                            'source'=>$link_name,
-                            'data'=>$serialized
-                        );
-                        $this->db->insert('trash', $data);
+                        move_to_trash($link_name, $result);
                         $this->db->where('id', $where);
                         $this->db->delete($link_name);
                         return 'Deleted row with ID: ' . $where;

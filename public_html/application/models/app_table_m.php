@@ -138,6 +138,7 @@ class app_table_m extends MY_Model
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th>App Table Name</th>
                 <th>App Name</th>
             </tr>
@@ -148,6 +149,7 @@ class app_table_m extends MY_Model
                     <td><?php echo anchor(base_url('app_table/' . $app_table->id), 'Edit'); ?></td>
                     <td><?php echo form_delete('app_table', $app_table->id); ?></td>
                     <td><?php echo anchor(base_url('app_column/?app_table=' . $app_table->id), 'Columns'); ?></td>
+                    <td><?php echo anchor(base_url('app_row/?app_table=' . $app_table->id), 'Rows'); ?></td>
                     <td><?php echo $app_table->name; ?></td>
                     <?php
                     $app = $this->app_m->get_where($app_table->app_id);

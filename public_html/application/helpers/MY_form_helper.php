@@ -63,3 +63,20 @@ if( ! function_exists('form_delete'))
         return ob_get_clean();
     }
 }
+
+if( ! function_exists('form_restore'))
+{
+    function form_restore($id)
+    {
+        $action = base_url('trash/' . $id);
+        ob_start();
+        ?>
+        <form action="<?php echo $action; ?>" method="post">
+            <input type="hidden" name="id" value="<?php echo $id; ?>"/>
+            <?php echo form_csrf(); ?>
+            <input type="submit" value="Restore"/>
+        </form>
+        <?php
+        return ob_get_clean();
+    }
+}

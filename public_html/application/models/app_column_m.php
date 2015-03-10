@@ -162,7 +162,6 @@ class app_column_m extends MY_Model
 
     public function form($id = FALSE, $new = FALSE)
     {
-        //TODO disable input 'default' when type 'text' is selected with javascript
         $app_tables = $this->app_table_m->get();
         ob_start();
         if($app_tables)
@@ -200,6 +199,7 @@ class app_column_m extends MY_Model
                     'text'=>'Text'
                 ), set_value('type', 'bool'));
                 echo form_label('Default Value', 'default');
+                echo '<span>Default is ignored for type "Text"</span>';
                 echo form_input(array(
                     'id'=>'default',
                     'name'=>'default',

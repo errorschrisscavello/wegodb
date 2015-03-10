@@ -69,8 +69,6 @@ class MY_Model extends CI_Model
         return $this->db->affected_rows();
     }
 
-    //TODO best method for form binding?
-
     public function form($id = FALSE, $new = FALSE)
     {
         return '';
