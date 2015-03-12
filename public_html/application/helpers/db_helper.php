@@ -71,7 +71,7 @@ if( ! function_exists('field_to_label'))
             $word = $words[$i];
             $capitalized = strtoupper(substr($word, 0, 1)) . substr($word, 1, strlen($word));
             $label .= $capitalized;
-            $label .= ($i == count($words) - 1) ?  ' ' : '';
+            $label .= ($i != (count($words) - 1)) ?  ' ' : '';
         }
         return $label;
     }
