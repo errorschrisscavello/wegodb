@@ -8,7 +8,7 @@
     <h1>Login</h1>
     {{ validation_errors() }}
     {% if message is defined %}
-        <p>{{ message }}</p>
+        <p>{{ message|raw }}</p>
     {% endif %}
     {{ form|raw }}
 {% endblock %}

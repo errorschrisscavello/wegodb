@@ -1,0 +1,11 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+/*
+| -------------------------------------------------------------------
+| AUTH SALT
+| -------------------------------------------------------------------
+| Used in auth class
+*/
+
+$config['auth_salt'] = '%SALT%';

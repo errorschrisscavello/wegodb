@@ -199,7 +199,7 @@ class app_column_m extends MY_Model
                     'text'=>'Text'
                 ), set_value('type', 'bool'));
                 echo form_label('Default Value', 'default');
-                echo '<span>Default is ignored for type "Text"</span>';
+                echo '<small> (Note: Default is ignored for type "Text")</small>';
                 echo form_input(array(
                     'id'=>'default',
                     'name'=>'default',

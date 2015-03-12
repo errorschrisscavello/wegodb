@@ -5,6 +5,12 @@ class MY_Model extends CI_Model
     public $table = '';
     public $post_filter = array();
 
+    function __construct()
+    {
+        $this->load->dbforge();
+        parent::__construct();
+    }
+
     public function get()
     {
         $result = $this->db->get($this->table)->result();

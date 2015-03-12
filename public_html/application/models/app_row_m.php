@@ -185,7 +185,8 @@ class app_row_m extends MY_Model
     {
         $app_table = FALSE;
         $app_tables = FALSE;
-        if($app_rows = $this->get())
+        $app_rows = $this->get();
+        if(isset($_GET['app_table']))
         {
             $app_table = table_from_link($this->table);
             $sub_heading = 'Listing rows from app table: ' . $app_table->name;
@@ -197,32 +198,36 @@ class app_row_m extends MY_Model
         ?>
         <h2><?php echo $sub_heading; ?></h2>
         <?php if($app_table): ?>
-        <table>
-            <?php $columns = $this->app_column_m->get_columns('table_id', $app_table->id); ?>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th>ID</th>
-                    <?php foreach($columns as $column): ?>
-                        <th><?php echo $column->name; ?></th>
+            <?php if($app_rows): ?>
+                <table>
+                    <?php $columns = $this->app_column_m->get_columns('table_id', $app_table->id); ?>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>ID</th>
+                        <?php foreach($columns as $column): ?>
+                            <th><?php echo $column->name; ?></th>
+                        <?php endforeach; ?>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($app_rows as $app_row):?>
+                        <tr>
+                            <td><?php echo anchor(base_url('app_row/' . $app_row->id . '?app_table=' . $app_table->id), 'Edit'); ?></td>
+                            <td><?php echo form_delete('app_row', $app_row->id . '?app_table=' . $app_table->id); ?></td>
+                            <td><?php echo $app_row->id; ?></td>
+                            <?php foreach($columns as $column): ?>
+                                <?php $column_name = $column->name; ?>
+                                <td><?php echo $app_row->$column_name; ?></td>
+                            <?php endforeach; ?>
+                        </tr>
                     <?php endforeach; ?>
-                </tr>
-            </thead>
-            <tbody>
-            <?php foreach($app_rows as $app_row):?>
-                <tr>
-                    <td><?php echo anchor(base_url('app_row/' . $app_row->id . '?app_table=' . $app_table->id), 'Edit'); ?></td>
-                    <td><?php echo form_delete('app_row', $app_row->id . '?app_table=' . $app_table->id); ?></td>
-                    <td><?php echo $app_row->id; ?></td>
-                    <?php foreach($columns as $column): ?>
-                        <?php $column_name = $column->name; ?>
-                        <td><?php echo $app_row->$column_name; ?></td>
-                    <?php endforeach; ?>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p>No rows exist on table: <?php echo $app_table->name; ?>. Create a new row!</p>
+        <?php endif; ?>
         <?php elseif($app_tables): ?>
         <ul>
             <?php foreach($app_tables as $app_table): ?>

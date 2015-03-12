@@ -9,6 +9,7 @@ class MY_Controller extends CI_Controller
     public $message = '';
     public $errors = array();
     public $public_uris = array(
+        'user/activate',
         'api/invalid',
         'api/csrf',
         'error',

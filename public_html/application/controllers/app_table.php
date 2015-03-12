@@ -113,7 +113,7 @@ class app_table extends MY_Controller
             }
             if($count > 0)
             {
-                $this->form_validation->set_message('valid_name', 'Column "' . $str . '" already exists on table "' . $app->name . '"');
+                $this->form_validation->set_message('valid_name', 'Table "' . $str . '" already exists in App: "' . $app->name . '"');
                 return FALSE;
             }
         }
