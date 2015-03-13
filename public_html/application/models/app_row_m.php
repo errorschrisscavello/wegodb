@@ -215,7 +215,7 @@ class app_row_m extends MY_Model
                     <?php foreach($app_rows as $app_row):?>
                         <tr>
                             <td><?php echo anchor(base_url('app_row/' . $app_row->id . '?app_table=' . $app_table->id), 'Edit'); ?></td>
-                            <td><?php echo form_delete('app_row', $app_row->id . '?app_table=' . $app_table->id); ?></td>
+                            <td><?php echo form_delete('app_row', $app_row->id . '?app_table=' . $app_table->id, 'Trash'); ?></td>
                             <td><?php echo $app_row->id; ?></td>
                             <?php foreach($columns as $column): ?>
                                 <?php $column_name = $column->name; ?>
