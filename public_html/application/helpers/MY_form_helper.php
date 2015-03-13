@@ -47,7 +47,7 @@ if( ! function_exists('form_edit'))
 
 if( ! function_exists('form_delete'))
 {
-    function form_delete($resource, $id)
+    function form_delete($resource, $id, $text = FALSE)
     {
         $action = base_url($resource . '/' . $id);
         ob_start();
@@ -57,7 +57,8 @@ if( ! function_exists('form_delete'))
             <input type="hidden" name="id" value="<?php echo $id; ?>"/>
             <?php rest_method_input('delete'); ?>
             <?php echo form_csrf(); ?>
-            <input type="submit" value="Delete"/>
+            <?php $value = ($text) ? $text : 'Delete'; ?>
+            <input type="submit" value="<?php echo $value; ?>"/>
         </form>
         <?php
         return ob_get_clean();
