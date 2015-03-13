@@ -35,9 +35,20 @@ class api_m extends MY_Model
 
     public function get_columns($table)
     {
-        $columns = $this->app_column_m->get_where('app_table_id', $table->id);
+        $columns = $this->app_column_m->get_columns('table_id', $table->id);
         is_array($columns) || $columns = array($columns);
         return $columns;
+    }
+
+    public function get_column_names($table)
+    {
+        $columns = $this->get_columns($table);
+        $column_names = array();
+        foreach($columns as $column)
+        {
+            $column_names[] = $column->name;
+        }
+        return $column_names;
     }
 
     public function get_rows($table)
@@ -59,7 +70,7 @@ class api_m extends MY_Model
         }elseif($action == 'delete'){
             return $this->delete();
         }
-        return FALSE;
+        return 'No action exists with name: ' . $action;
     }
 
     public function create()
@@ -70,12 +81,7 @@ class api_m extends MY_Model
         $table = $this->get_table($table_name);
         if($table->app_id == $app->id)
         {
-            $columns = $this->get_columns($table);
-            $column_names = array();
-            foreach($columns as $column)
-            {
-                $column_names[] = $column->name;
-            }
+            $column_names = $this->get_column_names($table);
             $data = (isset($this->data['data'])) ? $this->data['data'] : array();
             $escaped = array();
             foreach($data as $key => $value)
@@ -105,6 +111,42 @@ class api_m extends MY_Model
         if($table->app_id == $app->id)
         {
             $link_name = linked_table_name($table);
+            if(isset($this->data['order_by']))
+            {
+                $order_by = (string)$this->data['order_by'];
+                $args = explode(',', $order_by);
+                if(count($args) == 2)
+                {
+                    $column = trim($args[0]);
+                    $direction = trim(strtoupper($args[1]));
+                    $column_names = $this->get_column_names($table);
+                    $directions = array('ASC', 'DESC');
+                    if(in_array($column, $column_names))
+                    {
+                        if(in_array($direction, $directions))
+                        {
+                            $this->db->order_by($column, $direction);
+                        }else{
+                            return 'ORDER BY direction must be either "ASC" or "DESC". Cannot ORDER BY direction: ' . $direction;
+                        }
+                    }else{
+                        return 'Cannot ORDER BY on non-existing column: ' . $column;
+                    }
+                }else{
+                    return 'Arguments for ORDER BY statement were not well formed. Must follow pattern: [COLUMN],[DIRECTION]';
+                }
+            }
+            if(isset($this->data['limit']))
+            {
+                $limit = (int)$this->data['limit'];
+                if($limit)
+                {
+                    $this->db->limit($limit);
+                }else{
+                    return 'LIMIT statement must be an integer value. Cannot LIMIT results to: ' . $this->data['limit'];
+                }
+            }
+            //validate limit
             $data = $this->db->get($link_name)->result();
             return $data;
         }
