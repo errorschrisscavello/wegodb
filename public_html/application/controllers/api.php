@@ -19,11 +19,13 @@ class api extends MY_Controller
                 $_POST['data'] = json_decode($_POST['data']);
             }
             $this->api_m->data = $_POST;
-            if($action = $this->api_m->action())
+            $action = $this->api_m->action();
+            if(is_string($action))
             {
                 $this->message = $action;
             }else{
-                $this->message = 'That action does not exist';
+                $this->message = 'Completed action: ' . $_POST['action'];
+                $this->data = $action;
             }
         }
         $this->response();
