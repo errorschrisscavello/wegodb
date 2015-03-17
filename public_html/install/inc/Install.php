@@ -3,6 +3,7 @@
 class Install
 {
     public $heading = 'Welcome to the WegoDB Installer!';
+    public $infos = array();
     public $messages = array();
     public $errors = array();
     public $content = '';
@@ -230,15 +231,23 @@ return array(
         ?>
         <form action="/" method="post">
             <input type="hidden" name="type" id="type" value="database"/>
-            <label for="host">Host</label>
-            <input type="text" name="host" id="host" value="localhost"/>
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username"/>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password"/>
-            <label for="database">Database</label>
-            <input type="text" name="database" id="database"/>
-            <input type="submit" value="Submit"/>
+            <div class="form-group">
+                <label for="host">Host</label>
+                <input class="form-control" type="text" name="host" id="host" value="localhost"/>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" type="text" name="username" id="username"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="password"/>
+            </div>
+            <div class="form-group">
+                <label for="database">Database</label>
+                <input class="form-control" type="text" name="database" id="database"/>
+            </div>
+            <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
         </form>
         <?php
         return ob_get_clean();
@@ -250,17 +259,27 @@ return array(
         ?>
         <form action="/" method="post">
             <input type="hidden" name="type" id="type" value="user"/>
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username"/>
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email"/>
-            <label for="confirm_email">Confirm Email</label>
-            <input type="text" name="confirm_email" id="confirm_email"/>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password"/>
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" name="confirm_password" id="confirm_password"/>
-            <input type="submit" value="Submit"/>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input class="form-control" type="text" name="username" id="username"/>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" type="text" name="email" id="email"/>
+            </div>
+            <div class="form-group">
+                <label for="confirm_email">Confirm Email</label>
+                <input class="form-control" type="text" name="confirm_email" id="confirm_email"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="password"/>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input class="form-control" type="password" name="confirm_password" id="confirm_password"/>
+            </div>
+            <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
         </form>
         <?php
         return ob_get_clean();
@@ -326,7 +345,7 @@ return array(
 
     public function next()
     {
-        return '<a href="' . $this->base_url . '">Next</a>';
+        return '<a class="btn btn-primary" href="' . $this->base_url . '">Next</a>';
     }
 
     public function install()
@@ -361,16 +380,16 @@ return array(
 
         if( ! $this->permissions())
         {
-            $this->messages[] = 'Cannot install. Please make this directory writable by the server.';
-            $this->content = '<a href="' . $this->base_url . '">Check permissions again</a>';
+            $this->errors[] = 'Cannot install. Please make this directory writable by the server.';
+            $this->content = '<a class="btn btn-primary" href="' . $this->base_url . '">Check permissions again</a>';
         }elseif( ! $this->database()){
-            $this->messages[] = 'Please provide your database credentials.';
+            $this->infos[] = 'Please provide your database credentials.';
             $this->content = $this->db_form();
         }elseif($this->step == 'database'){
             $this->messages[] = 'Database installed!';
             $this->content = $this->next();
         }elseif( ! $this->user()){
-            $this->messages[] = 'Please create a user';
+            $this->infos[] = 'Please create a user';
             $this->content = $this->user_form();
         }elseif($this->step == 'user'){
             $this->messages[] = 'User created! Check your email for an activation link! Click next to continue to the login form!';
@@ -381,6 +400,7 @@ return array(
 
         $this->view(array(
             'heading'=>$this->heading,
+            'infos'=>$this->infos,
             'messages'=>$this->messages,
             'errors'=>$this->errors,
             'content'=>$this->content
