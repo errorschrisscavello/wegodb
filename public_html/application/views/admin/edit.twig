@@ -5,6 +5,12 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ heading }}</h1>
-        {{ form|raw }}
+    <h1>{{ heading|raw }}</h1>
+    <div class="alerts">
+        {{ validation_errors() }}
+        {% if message is defined %}
+            {{ message|raw }}
+        {% endif %}
+    </div>
+    {{ form|raw }}
 {% endblock %}
