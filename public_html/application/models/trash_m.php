@@ -115,7 +115,7 @@ class trash_m extends MY_Model
                         $i++;
                     }
                     ?>
-                    <table>
+                    <table class="table">
                         <thead>
                         <tr>
                             <?php echo $thead; ?>

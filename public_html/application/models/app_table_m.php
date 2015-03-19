@@ -75,12 +75,16 @@ class app_table_m extends MY_Model
 
                 echo form_open($action);
                 ! $app_table || rest_method_input('put');
+
+                echo form_group_open();
                 echo form_label('App Table Name', 'name');
                 echo form_input(array(
                     'id'=>'name',
                     'name'=>'name',
                     'value'=>$app_table_name
-                ));
+                ), '', form_control());
+                echo form_group_close();
+
                 $apps = $this->app_m->get();
                 $options = array();
                 $selected = $this->input->post('app');
@@ -99,8 +103,12 @@ class app_table_m extends MY_Model
                     'id'=>'app',
                     'name'=>'app'
                 );
+
+                echo form_group_open();
                 echo form_label('App', 'app');
-                echo form_dropdown($data, $options, $selected);
+                echo form_dropdown($data, $options, $selected, form_control());
+                echo form_group_close();
+
                 echo form_submit('submit', 'Submit');
                 echo form_close();
             }else{
@@ -132,7 +140,7 @@ class app_table_m extends MY_Model
         ?>
         <?php if($app_tables): ?>
         <h2><?php echo $sub_heading; ?></h2>
-        <table>
+        <table class="table">
             <thead>
             <tr>
                 <th></th>

@@ -38,12 +38,16 @@ class app_m extends MY_Model
 
             echo form_open($action);
             ! $app || rest_method_input('put');
+
+            echo form_group_open();
             echo form_label('App Name', 'name');
             echo form_input(array(
                 'id'=>'name',
                 'name'=>'name',
                 'value'=>$app_name
-            ));
+            ), '', form_control());
+            echo form_group_close();
+
             echo form_submit('submit', 'Submit');
             echo form_close();
         }else{
@@ -59,7 +63,7 @@ class app_m extends MY_Model
         ob_start();
         ?>
         <?php if($apps): ?>
-        <table>
+        <table class="table">
             <thead>
             <tr>
                 <th></th>

@@ -45,33 +45,49 @@ class user_m extends MY_Model
 
             echo form_open($action);
             ! $user || rest_method_input('put');
+
+            echo form_group_open();
             echo form_label('Username', 'username');
             echo form_input(array(
                 'id'=>'username',
                 'name'=>'username',
                 'value'=>$username
-            ));
+            ), '', form_control());
+            echo form_group_close();
+
+            echo form_group_open();
             echo form_label('Email', 'email');
             echo form_input(array(
                 'id'=>'email',
                 'name'=>'email',
                 'value'=>$email
-            ));
+            ), '', form_control());
+            echo form_group_close();
+
+            echo form_group_open();
             echo form_label('Confirm Email', 'confirm_email');
             echo form_input(array(
                 'id'=>'confirm_email',
                 'name'=>'confirm_email'
-            ));
+            ), '', form_control());
+            echo form_group_close();
+
+            echo form_group_open();
             echo form_label('New Password', 'new_password');
             echo form_password(array(
                 'id'=>'new_password',
                 'name'=>'new_password'
-            ));
+            ), '', form_control());
+            echo form_group_close();
+
+            echo form_group_open();
             echo form_label('Confirm Password', 'confirm_password');
             echo form_password(array(
                 'id'=>'confirm_password',
                 'name'=>'confirm_password',
-            ));
+            ), '', form_control());
+            echo form_group_close();
+
             echo form_submit('submit', 'Submit');
             echo form_close();
         }else{
@@ -86,7 +102,7 @@ class user_m extends MY_Model
         ob_start();
         ?>
         <?php if($users): ?>
-            <table>
+            <table class="table">
                 <thead>
                 <tr>
                     <th></th>
