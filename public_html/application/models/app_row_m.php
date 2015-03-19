@@ -157,12 +157,14 @@ class app_row_m extends MY_Model
                         if($column->name != 'id')
                         {
                             $column_name = $column->name;
+                            echo form_group_open();
                             echo form_label(field_to_label($column_name), $column->name);
                             echo form_input(array(
                                 'id'=>$column_name,
                                 'name'=>$column_name,
                                 'value'=>($app_row) ? $app_row->$column_name : set_value($column->name, '')
-                            ));
+                            ), '', form_control());
+                            echo form_group_close();
                         }
                     }
                     echo form_submit('submit', 'Submit');
@@ -199,7 +201,7 @@ class app_row_m extends MY_Model
         <h2><?php echo $sub_heading; ?></h2>
         <?php if($app_table): ?>
             <?php if($app_rows): ?>
-                <table>
+                <table class="table">
                     <?php $columns = $this->app_column_m->get_columns('table_id', $app_table->id); ?>
                     <thead>
                     <tr>
@@ -229,14 +231,22 @@ class app_row_m extends MY_Model
                 <p>No rows exist on table: <?php echo $app_table->name; ?>. Create a new row!</p>
         <?php endif; ?>
         <?php elseif($app_tables): ?>
-        <ul>
-            <?php foreach($app_tables as $app_table): ?>
-                <li><?php echo anchor(base_url('app_row?app_table=' . $app_table->id), $app_table->name); ?></li>
+            <?php $apps = $this->app_m->get(); ?>
+            <?php foreach($apps as $app): ?>
+                <?php $app_tables = $this->app_table_m->get_all_where('app_id', $app->id); ?>
+                <h3><?php echo icon('phone'); ?> App: <?php echo $app->name; ?></h3>
+                <ul class="list-group">
+                    <?php foreach($app_tables as $app_table): ?>
+                        <li class="list-group-item"><?php echo anchor(base_url('app_row?app_table=' . $app_table->id), icon('th-large') . ' ' . $app_table->name); ?></li>
+                    <?php endforeach; ?>
+                </ul>
             <?php endforeach; ?>
-        </ul>
         <?php else: ?>
             <p>No tables found. Create a table and add some columns and rows!</p>
         <?php endif; ?>
+        <p><?php echo anchor(base_url('app'), 'Back to Apps'); ?></p>
+        <p><?php echo anchor(base_url('app_table'), 'Back to App Tables'); ?></p>
+        <p><?php echo anchor(base_url('app_column'), 'Back to App Columns'); ?></p>
         <?php
         return ob_get_clean();
     }
