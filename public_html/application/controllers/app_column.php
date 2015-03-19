@@ -24,16 +24,17 @@ class app_column extends MY_Controller
         )
     );
 
-    public function listing($message = FALSE)
+    public function listing()
     {
+        $this->set_message();
         $listing = $this->app_column_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing App Columns',
-            'heading'=>'App Columns',
+            'heading'=>icon('th') . ' App Columns',
             'resource'=>'app_column',
             'message'=>$this->message,
             'listing'=>$listing,
-            'new'=>anchor(base_url('app_column?new=1'), 'New app column')
+            'new'=>anchor(base_url('app_column?new=1'), icon('plus') . ' New app column')
         ));
     }
 
@@ -58,7 +59,7 @@ class app_column extends MY_Controller
             $form = $this->app_column_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App Column',
-                'heading'=>'App Columns',
+                'heading'=>icon('th') . ' App Columns',
                 'resource'=>'app_column',
                 'form'=>$form
             ));
