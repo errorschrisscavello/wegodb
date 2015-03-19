@@ -16,14 +16,15 @@ class app_table extends MY_Controller
 
     public function listing()
     {
+        $this->set_message();
         $listing = $this->app_table_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing App Tables',
-            'heading'=>'App Tables',
+            'heading'=>icon('th-large') . ' App Tables',
             'resource'=>'app_table',
             'message'=>$this->message,
             'listing'=>$listing,
-            'new'=>anchor(base_url('app_table?new=1'), 'New app table')
+            'new'=>anchor(base_url('app_table?new=1'), icon('plus') . ' New app table')
         ));
     }
 
@@ -48,7 +49,7 @@ class app_table extends MY_Controller
             $form = $this->app_table_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App Table',
-                'heading'=>'App Tables',
+                'heading'=>icon('th-large') . ' App Tables',
                 'resource'=>'app_table',
                 'form'=>$form
             ));

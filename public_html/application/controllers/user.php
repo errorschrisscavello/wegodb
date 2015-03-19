@@ -38,14 +38,15 @@ class user extends MY_Controller
 
     public function listing()
     {
+        $this->set_message();
         $listing = $this->user_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing Users',
-            'heading'=>'Users',
+            'heading'=>icon('user') . ' Users',
             'resource'=>'user',
             'message'=>$this->message,
             'listing'=>$listing,
-            'new'=>anchor(base_url('user?new=1'), 'New user')
+            'new'=>anchor(base_url('user?new=1'), icon('plus') . ' New user')
         ));
     }
 
@@ -72,7 +73,7 @@ class user extends MY_Controller
             $form = $this->user_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit User',
-                'heading'=>'Users',
+                'heading'=>icon('user') . ' Users',
                 'resource'=>'user',
                 'form'=>$form,
                 'nav'=>anchor(base_url('user'), 'Back to Users')

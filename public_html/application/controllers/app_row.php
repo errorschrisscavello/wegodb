@@ -8,14 +8,15 @@ class app_row extends MY_Controller
     public $errors = array();
     public $rules = array();
 
-    public function listing($message = FALSE)
+    public function listing()
     {
+        $this->set_message();
         $listing = $this->app_row_m->listing();
         $table = $this->input->get('app_table');
-        $new = ($table) ? anchor(base_url('app_row?new=1&app_table=' . $table), 'New app row') : '';
+        $new = ($table) ? anchor(base_url('app_row?new=1&app_table=' . $table), icon('plus') . ' New app row') : '';
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing App Rows',
-            'heading'=>'App Rows',
+            'heading'=>icon('th-list') . ' App Rows',
             'resource'=>'app_row',
             'message'=>$this->message,
             'listing'=>$listing,
@@ -37,7 +38,7 @@ class app_row extends MY_Controller
             $form = $this->app_row_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App Row',
-                'heading'=>'App Row',
+                'heading'=>icon('th-list') . ' App Rows',
                 'resource'=>'app_row',
                 'form'=>$form
             ));

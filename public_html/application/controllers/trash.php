@@ -16,10 +16,11 @@ class trash extends MY_Controller
 
     public function listing()
     {
+        $this->set_message();
         $listing = $this->trash_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing Trash',
-            'heading'=>'Trash',
+            'heading'=>icon('trash') . ' Trash',
             'resource'=>'trash',
             'message'=>$this->message,
             'listing'=>$listing,
