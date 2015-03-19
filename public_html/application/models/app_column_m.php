@@ -181,12 +181,17 @@ class app_column_m extends MY_Model
 
                 echo form_open($action);
                 ! $app_column || rest_method_input('put');
+
+                echo form_group_open();
                 echo form_label('App Column Name', 'name');
                 echo form_input(array(
                     'id'=>'name',
                     'name'=>'name',
                     'value'=>$app_column_name
-                ));
+                ), '', form_control());
+                echo form_group_close();
+
+                echo form_group_open();
                 echo form_label('Type', 'type');
                 echo form_dropdown(array(
                     'id'=>'type',
@@ -197,20 +202,26 @@ class app_column_m extends MY_Model
                     'float'=>'Float',
                     'string'=>'String',
                     'text'=>'Text'
-                ), set_value('type', 'bool'));
+                ), set_value('type', 'bool'), form_control());
+                echo form_group_close();
+
+                echo form_group_open();
                 echo form_label('Default Value', 'default');
                 echo '<small> (Note: Default is ignored for type "Text")</small>';
                 echo form_input(array(
                     'id'=>'default',
                     'name'=>'default',
                     'value'=>set_value('default', '')
-                ));
+                ), '', form_control());
+                echo form_group_close();
+
                 $app_tables = $this->app_table_m->get();
                 $options = array();
                 $selected = $this->input->post('table');
                 foreach($app_tables as $app_table)
                 {
-                    $options[$app_table->id] = $app_table->name;
+                    $app = $this->app_m->get_where($app_table->app_id);
+                    $options[$app_table->id] = 'App: ' . $app->name . ' | Table: ' . $app_table->name;
                     if($app_column)
                     {
                         if($app_column->app_table_id == $app_table->id)
@@ -223,8 +234,11 @@ class app_column_m extends MY_Model
                     'id'=>'table',
                     'name'=>'table'
                 );
+                echo form_group_open();
                 echo form_label('App Table', 'app_table');
-                echo form_dropdown($data, $options, $selected);
+                echo form_dropdown($data, $options, $selected, form_control());
+                echo form_group_close();
+
                 echo form_submit('submit', 'Submit');
                 echo form_close();
             }else{
@@ -269,7 +283,7 @@ class app_column_m extends MY_Model
         ?>
         <h2><?php echo $sub_heading; ?></h2>
         <?php if($app_columns): ?>
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th></th>
