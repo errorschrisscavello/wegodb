@@ -7,15 +7,19 @@ class admin_m extends MY_Model
         ob_start();
         ?>
         <form action="<?php echo base_url('login'); ?>" method="post">
-            <label for="user">Username or Email</label>
-            <input id="user" name="user" type="text" value="<?php echo set_value('user'); ?>"/>
+            <div class="form-group">
+                <label for="user">Username or Email</label>
+                <input class="form-control" id="user" name="user" type="text" value="<?php echo set_value('user'); ?>"/>
+            </div>
 
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password"/>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" id="password" name="password" type="password"/>
+            </div>
 
             <?php echo form_csrf(); ?>
 
-            <input type="submit" value="Login"/>
+            <?php echo form_submit('Login'); ?>
         </form>
         <?php
         return ob_get_clean();
