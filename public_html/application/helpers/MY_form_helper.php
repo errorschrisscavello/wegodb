@@ -81,3 +81,52 @@ if( ! function_exists('form_restore'))
         return ob_get_clean();
     }
 }
+
+if( ! function_exists('form_submit'))
+{
+    function form_submit($text = FALSE)
+    {
+        $text = ($text) ? $text : 'Submit';
+        ob_start();
+        ?>
+        <button class="btn btn-primary" type="submit"><?php echo $text; ?></button>
+        <?php
+        return ob_get_clean();
+    }
+}
+
+if( ! function_exists('form_control'))
+{
+    function form_control()
+    {
+        return 'class="form-control"';
+    }
+}
+
+if( ! function_exists('form_group_open'))
+{
+    function form_group_open()
+    {
+        return '<div class="form-group">';
+    }
+}
+
+if( ! function_exists('form_group_close'))
+{
+    function form_group_close()
+    {
+        return '</div>';
+    }
+}
+
+if( ! function_exists('icon'))
+{
+    function icon($type)
+    {
+        ob_start();
+        ?>
+        <span class="glyphicon glyphicon-<?php echo $type; ?>" aria-hidden="true"></span>
+        <?php
+        return ob_get_clean();
+    }
+}
