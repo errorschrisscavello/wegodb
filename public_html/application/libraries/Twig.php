@@ -83,7 +83,28 @@ class WegoTwig extends Twig_Extension
 
         $html_safe = array('is_safe'=>array('html'));
 
+        //TODO remove unused twig functions
+
         return array(
+            'active'=>new Twig_SimpleFunction('active', function($resource)
+            {
+                $active = '';
+                $uri = $this->ci->uri->segment(1);
+                $is_myaccount = ($resource == 'current' && isset($_GET['current']));
+                $is_home = ($uri == '' && $resource == '/');
+                $is_resource = (! isset($_GET['current']) && $resource == $uri);
+                if($is_home || $is_myaccount || $is_resource)
+                {
+                    $active = ' class="active"';
+                }
+                return $active;
+            }), $html_safe,
+
+            'icon'=>new Twig_SimpleFunction('icon', function($type)
+            {
+                return icon($type);
+            }), $html_safe,
+
             'form_edit'=>new Twig_SimpleFunction('form_edit', function($action, $method, $field_data, $data, $multi = FALSE)
             {
                 return form_edit($action, $method, $field_data, $data, $multi);
@@ -105,18 +126,20 @@ class WegoTwig extends Twig_Extension
                 $id = $this->ci->auth->get_user_by_identity($user)->result()[0]->id;
                 $href = base_url('user/' . $id);
                 $attr = '';
-                $text = 'My Account';
-                return '<a href="' . $href . '"' . $attr . '>' . $text . '</a>';
+                $icon = icon('cog');
+                $text = $icon . ' My Account';
+                return '<a href="' . $href . '?current=1"' . $attr . '>' . $text . '</a>';
             }, $html_safe),
 
-            'link_to'=>new Twig_SimpleFunction('link_to', function($href, $text, $attributes = array())
+            'link_to'=>new Twig_SimpleFunction('link_to', function($href, $text, $attributes = array(), $icon = FALSE)
             {
+                $icon = ($icon) ? icon($icon) . ' ' : '';
                 $attr = '';
                 foreach($attributes as $key => $value)
                 {
                     $attr .= ' ' . $key . '="' . $value . '"';
                 }
-                return '<a href="' . $href . '"' . $attr . '>' . $text . '</a>';
+                return '<a href="' . $href . '"' . $attr . '>' . $icon . $text . '</a>';
             }, $html_safe),
 
             'link_new'=>new Twig_SimpleFunction('link_new', function($href, $text, $attributes = array())
@@ -157,7 +180,10 @@ class WegoTwig extends Twig_Extension
 
             'validation_errors'=>new Twig_SimpleFunction('validation_errors', function()
             {
-                return $this->ci->form_validation->error_string();
+                $error_string = $this->ci->form_validation->error_string();
+                $error_string = preg_replace('/<p>/', '<div class="alert alert-danger">', $error_string);
+                $error_string = preg_replace('/<\/p>/', '</div>', $error_string);
+                return $error_string;
             }, $html_safe)
         );
     }
