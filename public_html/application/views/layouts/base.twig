@@ -13,19 +13,21 @@
         {% block head %}{% endblock %}
     </head>
     <body>
-        {% block body %}
-            <header>
-                {% block header %}{% endblock %}
-            </header>
+        <main class="container">
+            {% block body %}
+                <header>
+                    {% block header %}{% endblock %}
+                </header>
 
-            <section>
-                {% block content %}{% endblock %}
-            </section>
+                <section>
+                    {% block content %}{% endblock %}
+                </section>
 
-            <footer>
-                {% block footer %}{% endblock %}
-            </footer>
-        {% endblock %}
+                <footer>
+                    {% block footer %}{% endblock %}
+                </footer>
+            {% endblock %}
+        </main>
         {% block foot %}{% endblock %}
     </body>
 </html>
