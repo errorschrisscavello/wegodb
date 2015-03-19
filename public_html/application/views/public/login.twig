@@ -4,11 +4,41 @@
     | Login
 {% endblock %}
 
+{% block head %}
+    <style>
+        main{
+            max-width: 512px;
+        }
+        h1,
+        h2{
+            text-align: center;
+        }
+        .form{
+            max-width: 480px;
+        }
+        .alerts{
+            max-width: 320px;
+        }
+        main,
+        .form,
+        .alerts{
+            margin: 0 auto;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <h1>Login</h1>
-    {{ validation_errors() }}
-    {% if message is defined %}
-        <p>{{ message|raw }}</p>
-    {% endif %}
-    {{ form|raw }}
+    <h1>{{ icon('hdd')|raw }} WegoDB</h1>
+    <h2>Login</h2>
+    <div class="alerts">
+        {{ validation_errors() }}
+        {% if message is defined %}
+            <div class="alert alert-success">
+                {{ message|raw }}
+            </div>
+        {% endif %}
+    </div>
+    <div class="form">
+        {{ form|raw }}
+    </div>
 {% endblock %}
