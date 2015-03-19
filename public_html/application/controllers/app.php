@@ -18,14 +18,15 @@ class app extends MY_Controller
 
     public function listing()
     {
+        $this->set_message();
         $listing = $this->app_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing Apps',
-            'heading'=>'Apps',
+            'heading'=>icon('phone') . ' Apps',
             'resource'=>'app',
             'message'=>$this->message,
             'listing'=>$listing,
-            'new'=>anchor(base_url('app?new=1'), 'New app')
+            'new'=>anchor(base_url('app?new=1'), icon('plus') . ' New app')
         ));
     }
 
@@ -50,7 +51,7 @@ class app extends MY_Controller
             $form = $this->app_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App',
-                'heading'=>'Apps',
+                'heading'=>icon('phone') . ' Apps',
                 'resource'=>'app',
                 'form'=>$form
             ));
