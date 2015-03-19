@@ -7,25 +7,64 @@
 {% block head %}
     <meta name="csrf_token_name" content="{{ csrf_token_name }}"/>
     <meta name="csrf_hash" content="{{ csrf_hash }}"/>
+
+    <style>
+        main{
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1em;
+        }
+        section{
+            margin-top: 128px;
+        }
+    </style>
 {% endblock %}
 
 {% block header %}
-    <nav>
-        {{ link_to("#{base_url}user", 'Users') }}
-        {{ link_to("#{base_url}app", 'Apps') }}
-        {{ link_to("#{base_url}app_table", 'App Tables') }}
-        {{ link_to("#{base_url}app_column", 'App Columns') }}
-        {{ link_to("#{base_url}app_row", 'App Rows') }}
-        {{ link_to("#{base_url}trash", 'Trash') }}
-        {{ link_to("#{base_url}", 'WegoDB') }}
-        {# {{ link_to("#{base_url}migrate", 'Migrate') }} #}
-        {{ link_myaccount() }}
-        {{ link_to("#{base_url}logout", 'Logout') }}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                {{ link_to("#{base_url}", 'WegoDB', {'class':'navbar-brand'}, 'hdd') }}
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li{{ active('user')|raw }}>
+                        {{ link_to("#{base_url}user", 'Users', {}, 'user') }}
+                    </li>
+                    <li{{ active('app')|raw }}>
+                        {{ link_to("#{base_url}app", 'Apps', {}, 'phone') }}
+                    </li>
+                    <li{{ active('app_table')|raw }}>
+                        {{ link_to("#{base_url}app_table", 'App Tables', {}, 'th-large') }}
+                    </li>
+                    <li{{ active('app_column')|raw }}>
+                        {{ link_to("#{base_url}app_column", 'App Columns', {}, 'th') }}
+                    </li>
+                    <li{{ active('app_row')|raw }}>
+                        {{ link_to("#{base_url}app_row", 'App Rows', {}, 'th-list') }}
+                    </li>
+                    <li{{ active('trash')|raw }}>
+                        {{ link_to("#{base_url}trash", 'Trash', {}, 'trash') }}
+                    </li>
+                    <!--
+            <li{{ active('migrate') }}>
+                {# {{ link_to("#{base_url}migrate", 'Migrate') }} #}
+            </li>
+            -->
+                    <li{{ active('current')|raw }}>
+                        {{ link_myaccount() }}
+                    </li>
+                    <li>
+                        {{ link_to("#{base_url}logout", 'Logout', {}, 'off') }}
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <div>
-        {{ validation_errors() }}
-        {% if message is defined %}
-            <p>{{ message }}</p>
-        {% endif %}
-    </div>
 {% endblock %}
