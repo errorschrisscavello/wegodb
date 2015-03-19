@@ -90,4 +90,15 @@ class MY_Controller extends CI_Controller
             $this->form_validation->set_message($func, $error);
         }
     }
+
+    public function set_message()
+    {
+        if($this->message != '')
+        {
+            $message = $this->message;
+            $this->message = '<div class="alert alert-success">';
+            $this->message .= $message;
+            $this->message .= '</div>';
+        }
+    }
 }
