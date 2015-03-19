@@ -4,7 +4,15 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ heading }}</h1>
+    <h1>{{ heading|raw }}</h1>
+    <div class="alerts">
+        {{ validation_errors() }}
+        {% if message is defined %}
+            {{ message|raw }}
+        {% endif %}
+    </div>
     {{ new|raw }}
-    {{ listing|raw }}
+    <div class="table-responsive">
+        {{ listing|raw }}
+    </div>
 {% endblock %}
