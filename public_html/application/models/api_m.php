@@ -59,18 +59,22 @@ class Api_m extends MY_Model
 
     public function action()
     {
-        $action = $this->data['action'];
-        if($action == 'create')
+        if(isset($this->data['table']))
         {
-            return $this->create();
-        }elseif($action == 'read'){
-            return $this->read();
-        }elseif($action == 'update'){
-            return $this->update();
-        }elseif($action == 'delete'){
-            return $this->delete();
+            $action = $this->data['action'];
+            if($action == 'create')
+            {
+                return $this->create();
+            }elseif($action == 'read'){
+                return $this->read();
+            }elseif($action == 'update'){
+                return $this->update();
+            }elseif($action == 'delete'){
+                return $this->delete();
+            }
+            return 'No action exists with name: ' . $action;
         }
-        return 'No action exists with name: ' . $action;
+        return 'Please set a table on which to perform an action';
     }
 
     public function create()
