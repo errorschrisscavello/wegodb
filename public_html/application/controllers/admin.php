@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class admin extends MY_Controller
+class Admin extends MY_Controller
 {
-    public $model = 'admin_m';
+    public $model = 'Admin_m';
     public $load_model = TRUE;
     public $message = '';
     public $errors = array();
@@ -41,7 +41,7 @@ class admin extends MY_Controller
             redirect('dashboard');
         }else{
             $this->twig->render('public/login.twig', array(
-                'form'=>$this->admin_m->form()
+                'form'=>$this->Admin_m->form()
             ));
         }
     }

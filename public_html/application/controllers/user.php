@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class user extends MY_Controller
+class User extends MY_Controller
 {
-    public $model = 'user_m';
+    public $model = 'User_m';
     public $load_model = TRUE;
     public $message = '';
     public $errors = array(
@@ -39,7 +39,7 @@ class user extends MY_Controller
     public function listing()
     {
         $this->set_message();
-        $listing = $this->user_m->listing();
+        $listing = $this->User_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing Users',
             'heading'=>icon('user') . ' Users',
@@ -56,7 +56,7 @@ class user extends MY_Controller
         $create = $this->form_validation->run();
         if($create)
         {
-            $this->message = 'User created with ID: ' . $this->user_m->create();
+            $this->message = 'User created with ID: ' . $this->User_m->create();
             $this->message .= ' Check your email for an activation link!';
             $this->send_activation_email();
             $this->listing();
@@ -70,7 +70,7 @@ class user extends MY_Controller
         $create_new = create_new() || $new;
         if($id || $create_new)
         {
-            $form = $this->user_m->form($id, $create_new);
+            $form = $this->User_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit User',
                 'heading'=>icon('user') . ' Users',
@@ -88,7 +88,7 @@ class user extends MY_Controller
         $update = $this->can_update($id);
         if($update)
         {
-            $this->message = ($update) ? 'User updated! Affected rows: ' . $this->user_m->update($id) : $update;
+            $this->message = ($update) ? 'User updated! Affected rows: ' . $this->User_m->update($id) : $update;
             $this->listing();
         }else{
             $this->read($id);
@@ -105,7 +105,7 @@ class user extends MY_Controller
             )
         ));
         $delete = $this->form_validation->run();
-        $this->message = ($delete) ? 'User deleted! Affected rows: ' . $this->user_m->delete($id) : $delete;
+        $this->message = ($delete) ? 'User deleted! Affected rows: ' . $this->User_m->delete($id) : $delete;
         $this->listing();
     }
 
@@ -123,10 +123,10 @@ class user extends MY_Controller
                 $this->message = 'User activated!';
             }
         }
-        $this->load->model('admin_m');
+        $this->load->model('Admin_m');
         $this->twig->render('public/login.twig', array(
             'message'=>$this->message,
-            'form'=>$this->admin_m->form()
+            'form'=>$this->Admin_m->form()
         ));
     }
 
@@ -171,7 +171,7 @@ class user extends MY_Controller
         $can_update = FALSE;
         if($id)
         {
-            if($user = $this->user_m->get_where($id))
+            if($user = $this->User_m->get_where($id))
             {
                 $rules = array();
                 $username = $this->input->post('username');
@@ -179,23 +179,23 @@ class user extends MY_Controller
                 $confirm_email = $this->input->post('confirm_email');
                 $new_password = $this->input->post('new_password');
                 $confirm_password = $this->input->post('confirm_password');
-                $this->user_m->post_filter = array();
+                $this->User_m->post_filter = array();
                 if($username != $user->username)
                 {
                     $rules[] = $this->get_rules_by_field('username');
-                    $this->user_m->post_filter['username'] = 'username';
+                    $this->User_m->post_filter['username'] = 'username';
                 }
                 if($email != $user->email || $confirm_email != '')
                 {
                     $rules[] = $this->get_rules_by_field('email');
                     $rules[] = $this->get_rules_by_field('confirm_email');
-                    $this->user_m->post_filter['email'] = 'email';
+                    $this->User_m->post_filter['email'] = 'email';
                 }
                 if($new_password != '' || $confirm_password != '')
                 {
                     $rules[] = $this->get_rules_by_field('new_password');
                     $rules[] = $this->get_rules_by_field('confirm_password');
-                    $this->user_m->post_filter['password'] = 'confirm_password';
+                    $this->User_m->post_filter['password'] = 'confirm_password';
                 }
                 $this->form_validation->set_rules($rules);
                 $can_update = $this->form_validation->run();
@@ -206,12 +206,12 @@ class user extends MY_Controller
 
     public function can_delete($str)
     {
-        $user = $this->user_m->get_where($str);
+        $user = $this->User_m->get_where($str);
         if($user)
         {
             $username = $user->username;
             $is_current = $this->auth->is_current($username);
-            $is_sole = (count($this->user_m->get()) == 1);
+            $is_sole = (count($this->User_m->get()) == 1);
             if($is_current || $is_sole)
             {
                 ! $is_current || $this->form_validation->set_message('can_delete', 'Cannot delete currently logged in user');

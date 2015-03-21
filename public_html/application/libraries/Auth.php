@@ -4,14 +4,14 @@ class Auth
 {
     private $ci;
     public $salt = '';
-    public $api_m;
+    public $Api_m;
 
     function __construct()
     {
         $this->salt = config_item('auth_salt');
         $this->ci =& get_instance();
-        $this->ci->load->model('api_m');
-        $this->api_m = $this->ci->api_m;
+        $this->ci->load->model('Api_m');
+        $this->Api_m = $this->ci->Api_m;
     }
 
     public function is_api_request()
@@ -24,7 +24,7 @@ class Auth
         $api_csrf = $this->ci->input->post('csrf');
         $api_token = $this->ci->input->post('token');
 
-        return($api_csrf == $this->csrf() && $this->api_m->get_app($api_token));
+        return($api_csrf == $this->csrf() && $this->Api_m->get_app($api_token));
     }
 
     public function csrf()

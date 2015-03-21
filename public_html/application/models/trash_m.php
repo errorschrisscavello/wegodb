@@ -1,24 +1,24 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class trash_m extends MY_Model
+class Trash_m extends MY_Model
 {
     public $table = 'trash';
     public $post_filter = array(
         'source'=>'source',
         'data'=>'data'
     );
-    public $app_m;
-    public $app_table_m;
-    public $app_column_m;
+    public $App_m;
+    public $App_table_m;
+    public $App_column_m;
 
     function __construct()
     {
         $ci =& get_instance();
-        $ci->load->model('app_m');
-        $ci->load->model('app_table_m');
-        $this->app_m =& $ci->app_m;
-        $this->app_table_m =& $ci->app_table_m;
-        $this->app_column_m =& $ci->app_column_m;
+        $ci->load->model('App_m');
+        $ci->load->model('App_table_m');
+        $this->App_m =& $ci->App_m;
+        $this->App_table_m =& $ci->App_table_m;
+        $this->App_column_m =& $ci->App_column_m;
         parent::__construct();
     }
 

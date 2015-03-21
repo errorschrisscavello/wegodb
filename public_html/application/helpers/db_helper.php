@@ -44,8 +44,8 @@ if( ! function_exists('table_from_link'))
     {
         $ci =& get_instance();
         $id = str_replace('table', '', explode('_', $link_name)[1]);
-        $ci->load->model('app_table_m');
-        return $ci->app_table_m->get_where($id);
+        $ci->load->model('App_table_m');
+        return $ci->App_table_m->get_where($id);
     }
 }
 
@@ -55,8 +55,8 @@ if( ! function_exists('app_from_link'))
     {
         $ci =& get_instance();
         $id = str_replace('app', '', explode('_', $link_name)[0]);
-        $ci->load->model('app_m');
-        return $ci->app_m->get_where($id);
+        $ci->load->model('App_m');
+        return $ci->App_m->get_where($id);
     }
 }
 

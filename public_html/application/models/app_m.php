@@ -1,22 +1,22 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_m extends MY_Model
+class App_m extends MY_Model
 {
     public $table = 'apps';
     public $post_filter = array(
         'name'=>'name',
         'token'=>'token'
     );
-    public $app_table_m;
-    public $app_column_m;
+    public $App_table_m;
+    public $App_column_m;
 
     function __construct()
     {
         $ci =& get_instance();
-        $ci->load->model('app_table_m');
-        $ci->load->model('app_column_m');
-        $this->app_table_m =& $ci->app_table_m;
-        $this->app_column_m =& $ci->app_column_m;
+        $ci->load->model('App_table_m');
+        $ci->load->model('App_column_m');
+        $this->App_table_m =& $ci->App_table_m;
+        $this->App_column_m =& $ci->App_column_m;
         parent::__construct();
     }
 
@@ -103,12 +103,12 @@ class app_m extends MY_Model
 
     public function delete($id)
     {
-        $app_tables = $this->app_table_m->get_all_where('app_id', $id);
+        $app_tables = $this->App_table_m->get_all_where('app_id', $id);
         if($app_tables)
         {
             foreach($app_tables as $app_table)
             {
-                $this->app_table_m->delete($app_table->id);
+                $this->App_table_m->delete($app_table->id);
             }
         }
         return parent::delete($id);

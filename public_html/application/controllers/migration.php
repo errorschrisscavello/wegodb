@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class migration extends MY_Controller
+class Migration extends MY_Controller
 {
     public function migrate()
     {

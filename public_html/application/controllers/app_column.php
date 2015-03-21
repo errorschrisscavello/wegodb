@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_column extends MY_Controller
+class App_column extends MY_Controller
 {
-    public $model = 'app_column_m';
+    public $model = 'App_column_m';
     public $load_model = TRUE;
     public $message = '';
     public $errors = array();
@@ -27,7 +27,7 @@ class app_column extends MY_Controller
     public function listing()
     {
         $this->set_message();
-        $listing = $this->app_column_m->listing();
+        $listing = $this->App_column_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing App Columns',
             'heading'=>icon('th') . ' App Columns',
@@ -44,7 +44,7 @@ class app_column extends MY_Controller
         $create = $this->form_validation->run();
         if($create)
         {
-            $this->message = 'App Column created with ID: ' . $this->app_column_m->create();
+            $this->message = 'App Column created with ID: ' . $this->App_column_m->create();
             $this->listing();
         }else{
             $this->read(FALSE, TRUE);
@@ -56,7 +56,7 @@ class app_column extends MY_Controller
         $create_new = create_new() || $new;
         if($id || $create_new)
         {
-            $form = $this->app_column_m->form($id, $create_new);
+            $form = $this->App_column_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App Column',
                 'heading'=>icon('th') . ' App Columns',
@@ -84,7 +84,7 @@ class app_column extends MY_Controller
             )
         ));
         $delete = $this->form_validation->run();
-        $this->message = ($delete) ? 'App Column deleted! Affected rows: ' . $this->app_column_m->delete($id) : $delete;
+        $this->message = ($delete) ? 'App Column deleted! Affected rows: ' . $this->App_column_m->delete($id) : $delete;
         $this->listing();
     }
 
@@ -102,8 +102,8 @@ class app_column extends MY_Controller
         }
         $app_table_id = $this->input->post('table');
         $ci =& get_instance();
-        $ci->load->model('app_table_m');
-        $app_table = $ci->app_table_m->get_where($app_table_id);
+        $ci->load->model('App_table_m');
+        $app_table = $ci->App_table_m->get_where($app_table_id);
         $link_name = linked_table_name($app_table);
         if($ci->db->field_exists($str, $link_name))
         {
@@ -115,11 +115,11 @@ class app_column extends MY_Controller
 
     public function can_delete($str)
     {
-        $column = $this->app_column_m->get_where($str);
+        $column = $this->App_column_m->get_where($str);
         $ci =& get_instance();
-        $ci->load->model('app_table_m');
-        $app_table = $ci->app_table_m->get_where($column->app_table_id);
-        $num_rows = $this->app_column_m->get_num_rows($app_table);
+        $ci->load->model('App_table_m');
+        $app_table = $ci->App_table_m->get_where($column->app_table_id);
+        $num_rows = $this->App_column_m->get_num_rows($app_table);
         if($num_rows != 0)
         {
             $this->form_validation->set_message('can_delete', 'Cannot delete column on table with existing rows');

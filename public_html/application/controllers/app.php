@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app extends MY_Controller
+class App extends MY_Controller
 {
-    public $model = 'app_m';
+    public $model = 'App_m';
     public $load_model = TRUE;
     public $message = '';
     public $errors = array(
@@ -19,7 +19,7 @@ class app extends MY_Controller
     public function listing()
     {
         $this->set_message();
-        $listing = $this->app_m->listing();
+        $listing = $this->App_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing Apps',
             'heading'=>icon('phone') . ' Apps',
@@ -36,7 +36,7 @@ class app extends MY_Controller
         $create = $this->form_validation->run();
         if($create)
         {
-            $this->message = 'App created with ID: ' . $this->app_m->create();
+            $this->message = 'App created with ID: ' . $this->App_m->create();
             $this->listing();
         }else{
             $this->read(FALSE, TRUE);
@@ -48,7 +48,7 @@ class app extends MY_Controller
         $create_new = create_new() || $new;
         if($id || $create_new)
         {
-            $form = $this->app_m->form($id, $create_new);
+            $form = $this->App_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App',
                 'heading'=>icon('phone') . ' Apps',
@@ -66,7 +66,7 @@ class app extends MY_Controller
         $update = $this->form_validation->run();
         if($update)
         {
-            $this->message = ($update) ? 'App updated! Affected rows: ' . $this->app_m->update($id) : $update;
+            $this->message = ($update) ? 'App updated! Affected rows: ' . $this->App_m->update($id) : $update;
             $this->listing();
         }else{
             $this->read($id);
@@ -83,15 +83,15 @@ class app extends MY_Controller
             )
         ));
         $delete = $this->form_validation->run();
-        $this->message = ($delete) ? 'App deleted! Affected rows: ' . $this->app_m->delete($id) : $delete;
+        $this->message = ($delete) ? 'App deleted! Affected rows: ' . $this->App_m->delete($id) : $delete;
         $this->listing();
     }
 
     public function can_delete($str)
     {
         $ci =& get_instance();
-        $ci->load->model('app_table_m');
-        $app_tables = $ci->app_table_m->get_all_where('app_id', $str);
+        $ci->load->model('App_table_m');
+        $app_tables = $ci->App_table_m->get_all_where('app_id', $str);
         if($app_tables)
         {
             $this->form_validation->set_message('can_delete', 'Cannot delete app with existing tables');

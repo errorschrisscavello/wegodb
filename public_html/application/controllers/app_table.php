@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_table extends MY_Controller
+class App_table extends MY_Controller
 {
-    public $model = 'app_table_m';
+    public $model = 'App_table_m';
     public $load_model = TRUE;
     public $message = '';
     public $errors = array();
@@ -17,7 +17,7 @@ class app_table extends MY_Controller
     public function listing()
     {
         $this->set_message();
-        $listing = $this->app_table_m->listing();
+        $listing = $this->App_table_m->listing();
         $this->twig->render('admin/listing.twig', array(
             'title'=>'Listing App Tables',
             'heading'=>icon('th-large') . ' App Tables',
@@ -34,7 +34,7 @@ class app_table extends MY_Controller
         $create = $this->form_validation->run();
         if($create)
         {
-            $this->message = 'App Table created with ID: ' . $this->app_table_m->create();
+            $this->message = 'App Table created with ID: ' . $this->App_table_m->create();
             $this->listing();
         }else{
             $this->read(FALSE, TRUE);
@@ -46,7 +46,7 @@ class app_table extends MY_Controller
         $create_new = create_new() || $new;
         if($id || $create_new)
         {
-            $form = $this->app_table_m->form($id, $create_new);
+            $form = $this->App_table_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App Table',
                 'heading'=>icon('th-large') . ' App Tables',
@@ -64,7 +64,7 @@ class app_table extends MY_Controller
         $update = $this->form_validation->run();
         if($update)
         {
-            $this->message = ($update) ? 'App Table updated! Affected rows: ' . $this->app_table_m->update($id) : $update;
+            $this->message = ($update) ? 'App Table updated! Affected rows: ' . $this->App_table_m->update($id) : $update;
             $this->listing();
         }else{
             $this->read($id);
@@ -81,7 +81,7 @@ class app_table extends MY_Controller
             )
         ));
         $delete = $this->form_validation->run();
-        $this->message = ($delete) ? 'App Table deleted! Affected rows: ' . $this->app_table_m->delete($id) : $delete;
+        $this->message = ($delete) ? 'App Table deleted! Affected rows: ' . $this->App_table_m->delete($id) : $delete;
         $this->listing();
     }
 
@@ -99,9 +99,9 @@ class app_table extends MY_Controller
         }
         $app_id = $this->input->post('app');
         $ci =& get_instance();
-        $ci->load->model('app_m');
-        $app = $ci->app_m->get_where($app_id);
-        $app_tables = $this->app_table_m->get_all_where('app_id', $app_id);
+        $ci->load->model('App_m');
+        $app = $ci->App_m->get_where($app_id);
+        $app_tables = $this->App_table_m->get_all_where('app_id', $app_id);
         $count = 0;
         if($app_tables)
         {
@@ -124,8 +124,8 @@ class app_table extends MY_Controller
     public function can_delete($str)
     {
         $ci =& get_instance();
-        $ci->load->model('app_column_m');
-        $app_columns = $ci->app_column_m->get_all_where('app_table_id', $str);
+        $ci->load->model('App_column_m');
+        $app_columns = $ci->App_column_m->get_all_where('app_table_id', $str);
         if($app_columns)
         {
             $this->form_validation->set_message('can_delete', 'Cannot delete table with existing columns');

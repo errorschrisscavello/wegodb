@@ -44,7 +44,6 @@ class MY_Controller extends CI_Controller
 
             if( ! $this->auth->validate_api())
             {
-                //TODO send error message to api controller
                 redirect('api/invalid');
             }
         }else{

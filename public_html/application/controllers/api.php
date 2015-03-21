@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class api extends MY_Controller
+class Api extends MY_Controller
 {
-    public $model = 'api_m';
+    public $model = 'Api_m';
     public $load_model = TRUE;
     public $message = '';
     public $status = '';
@@ -18,8 +18,8 @@ class api extends MY_Controller
             {
                 $_POST['data'] = json_decode($_POST['data']);
             }
-            $this->api_m->data = $_POST;
-            $action = $this->api_m->action();
+            $this->Api_m->data = $_POST;
+            $action = $this->Api_m->action();
             if(is_string($action))
             {
                 $this->message = $action;
