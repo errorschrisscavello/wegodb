@@ -102,7 +102,7 @@ class App_column extends MY_Controller
         }
         $app_table_id = $this->input->post('table');
         $ci =& get_instance();
-        $ci->load->model('1', '1');
+        $ci->load->model('App_table_m');
         $app_table = $ci->App_table_m->get_where($app_table_id);
         $link_name = linked_table_name($app_table);
         if($ci->db->field_exists($str, $link_name))
@@ -117,7 +117,7 @@ class App_column extends MY_Controller
     {
         $column = $this->App_column_m->get_where($str);
         $ci =& get_instance();
-        $ci->load->model('1', '1');
+        $ci->load->model('App_table_m');
         $app_table = $ci->App_table_m->get_where($column->app_table_id);
         $num_rows = $this->App_column_m->get_num_rows($app_table);
         if($num_rows != 0)
