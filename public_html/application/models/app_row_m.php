@@ -1,20 +1,20 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_row_m extends MY_Model
+class App_row_m extends MY_Model
 {
-    public $app_m;
-    public $app_table_m;
-    public $app_column_m;
+    public $App_m;
+    public $App_table_m;
+    public $App_column_m;
 
     function __construct()
     {
         $ci =& get_instance();
-        $ci->load->model('app_m');
-        $ci->load->model('app_table_m');
-        $ci->load->model('app_column_m');
-        $this->app_m =& $ci->app_m;
-        $this->app_table_m =& $ci->app_table_m;
-        $this->app_column_m =& $ci->app_column_m;
+        $ci->load->model('App_m');
+        $ci->load->model('App_table_m');
+        $ci->load->model('App_column_m');
+        $this->App_m =& $ci->App_m;
+        $this->App_table_m =& $ci->App_table_m;
+        $this->App_column_m =& $ci->App_column_m;
         $this->set_table();
         parent::__construct();
     }
@@ -32,7 +32,7 @@ class app_row_m extends MY_Model
         }
         if($id)
         {
-            $app_table = $this->app_table_m->get_where($id);
+            $app_table = $this->App_table_m->get_where($id);
             $link_name = linked_table_name($app_table);
             $this->table = $link_name;
         }
@@ -125,7 +125,7 @@ class app_row_m extends MY_Model
     public function filter_post()
     {
         $table_id = $this->input->post('app_table');
-        $app_columns = $this->app_column_m->get_columns('table_id', $table_id);
+        $app_columns = $this->App_column_m->get_columns('table_id', $table_id);
         $this->post_filter = ($app_columns) ? $this->columns_to_post_filter($app_columns): array();
         return parent::filter_post();
     }
@@ -134,9 +134,9 @@ class app_row_m extends MY_Model
     {
         $table_id = $this->input->get('app_table');
         ob_start();
-        if($app_table = $this->app_table_m->get_where($table_id))
+        if($app_table = $this->App_table_m->get_where($table_id))
         {
-            if($app_columns = $this->app_column_m->get_columns('table_id', $table_id))
+            if($app_columns = $this->App_column_m->get_columns('table_id', $table_id))
             {
                 $app_row = FALSE;
                 if($id)
@@ -193,7 +193,7 @@ class app_row_m extends MY_Model
             $app_table = table_from_link($this->table);
             $sub_heading = 'Listing rows from app table: ' . $app_table->name;
         }else{
-            $app_tables = $this->app_table_m->get();
+            $app_tables = $this->App_table_m->get();
             $sub_heading = 'Please select an app table to display it\'s rows';
         }
         ob_start();
@@ -202,7 +202,7 @@ class app_row_m extends MY_Model
         <?php if($app_table): ?>
             <?php if($app_rows): ?>
                 <table class="table">
-                    <?php $columns = $this->app_column_m->get_columns('table_id', $app_table->id); ?>
+                    <?php $columns = $this->App_column_m->get_columns('table_id', $app_table->id); ?>
                     <thead>
                     <tr>
                         <th></th>
@@ -231,9 +231,9 @@ class app_row_m extends MY_Model
                 <p>No rows exist on table: <?php echo $app_table->name; ?>. Create a new row!</p>
         <?php endif; ?>
         <?php elseif($app_tables): ?>
-            <?php $apps = $this->app_m->get(); ?>
+            <?php $apps = $this->App_m->get(); ?>
             <?php foreach($apps as $app): ?>
-                <?php $app_tables = $this->app_table_m->get_all_where('app_id', $app->id); ?>
+                <?php $app_tables = $this->App_table_m->get_all_where('app_id', $app->id); ?>
                 <h3><?php echo icon('phone'); ?> App: <?php echo $app->name; ?></h3>
                 <ul class="list-group">
                     <?php foreach($app_tables as $app_table): ?>

@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class user_m extends MY_Model
+class User_m extends MY_Model
 {
     public $table = 'users';
     public $post_filter = array(

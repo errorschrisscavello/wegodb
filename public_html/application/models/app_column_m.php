@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_column_m extends MY_Model
+class App_column_m extends MY_Model
 {
     public $table = 'app_columns';
     public $post_filter = array(
         'name'=>'name',
         'app_table_id'=>'table'
     );
-    public $app_m;
-    public $app_table_m;
+    public $App_m;
+    public $App_table_m;
     public $types = array(
         'bool',
         'int',
@@ -20,10 +20,10 @@ class app_column_m extends MY_Model
     function __construct()
     {
         $ci =& get_instance();
-        $ci->load->model('app_m');
-        $ci->load->model('app_table_m');
-        $this->app_m =& $ci->app_m;
-        $this->app_table_m =& $ci->app_table_m;
+        $ci->load->model('App_m');
+        $ci->load->model('App_table_m');
+        $this->App_m =& $ci->App_m;
+        $this->App_table_m =& $ci->App_table_m;
         parent::__construct();
     }
 
@@ -57,7 +57,7 @@ class app_column_m extends MY_Model
 
     public function get_columns($key = FALSE, $value = FALSE)
     {
-        $app_tables = $this->app_table_m->get();
+        $app_tables = $this->App_table_m->get();
         $columns = array();
         if($app_tables)
         {
@@ -82,7 +82,7 @@ class app_column_m extends MY_Model
                         $column->table_name = $app_table->name;
                         $column->table_id = $app_table->id;
                         $app_id = $app_table->app_id;
-                        $app = $this->app_m->get_where($app_id);
+                        $app = $this->App_m->get_where($app_id);
                         $column->app_id = $app_id;
                         $column->app_name = $app->name;
                         $can_append = TRUE;
@@ -115,7 +115,7 @@ class app_column_m extends MY_Model
         $data['table'] = $this->input->post('table');
         $data['type'] = $this->input->post('type');
         $data['default'] = $this->input->post('default');
-        $app_table = $this->app_table_m->get_where($data['table']);
+        $app_table = $this->App_table_m->get_where($data['table']);
         $link_name = linked_table_name($app_table);
         $name = $data['name'];
         $type = $data['type'];
@@ -154,7 +154,7 @@ class app_column_m extends MY_Model
     public function delete($id)
     {
         $column = $this->get_where($id);
-        $app_table = $this->app_table_m->get_where($column->app_table_id);
+        $app_table = $this->App_table_m->get_where($column->app_table_id);
         $link_name = linked_table_name($app_table);
         $this->dbforge->drop_column($link_name, $column->name);
         return parent::delete($id);
@@ -162,7 +162,7 @@ class app_column_m extends MY_Model
 
     public function form($id = FALSE, $new = FALSE)
     {
-        $app_tables = $this->app_table_m->get();
+        $app_tables = $this->App_table_m->get();
         ob_start();
         if($app_tables)
         {
@@ -215,12 +215,12 @@ class app_column_m extends MY_Model
                 ), '', form_control());
                 echo form_group_close();
 
-                $app_tables = $this->app_table_m->get();
+                $app_tables = $this->App_table_m->get();
                 $options = array();
                 $selected = $this->input->post('table');
                 foreach($app_tables as $app_table)
                 {
-                    $app = $this->app_m->get_where($app_table->app_id);
+                    $app = $this->App_m->get_where($app_table->app_id);
                     $options[$app_table->id] = 'App: ' . $app->name . ' | Table: ' . $app_table->name;
                     if($app_column)
                     {
@@ -256,11 +256,11 @@ class app_column_m extends MY_Model
         if($filtered = $app_id = $this->input->get('app'))
         {
             $app_columns = $this->get_columns('app_id', $app_id);
-            $app = $this->app_m->get_where($app_id);
+            $app = $this->App_m->get_where($app_id);
             $sub_heading = 'Listing columns for app table: ' . $app->name;
         }elseif($filtered = $app_table_id = $this->input->get('app_table')){
             $app_columns = $this->get_columns('table_id', $app_table_id);
-            $app_table = $this->app_table_m->get_where($app_table_id);
+            $app_table = $this->App_table_m->get_where($app_table_id);
             $sub_heading = 'Listing columns for app table: ' . $app_table->name;
         }else{
             $app_columns = $this->get_columns();

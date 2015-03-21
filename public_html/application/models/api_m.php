@@ -1,41 +1,41 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class api_m extends MY_Model
+class Api_m extends MY_Model
 {
-    public $app_m;
-    public $app_table_m;
-    public $app_column_m;
-    public $app_row_m;
+    public $App_m;
+    public $App_table_m;
+    public $App_column_m;
+    public $App_row_m;
     public $data;
 
     function __construct()
     {
         $ci =& get_instance();
-        $ci->load->model('app_m');
-        $ci->load->model('app_table_m');
-        $ci->load->model('app_column_m');
-        $ci->load->model('app_row_m');
-        $this->app_m = $ci->app_m;
-        $this->app_table_m = $ci->app_table_m;
-        $this->app_column_m = $ci->app_column_m;
-        $this->app_row_m = $ci->app_row_m;
+        $ci->load->model('App_m');
+        $ci->load->model('App_table_m');
+        $ci->load->model('App_column_m');
+        $ci->load->model('App_row_m');
+        $this->App_m = $ci->App_m;
+        $this->App_table_m = $ci->App_table_m;
+        $this->App_column_m = $ci->App_column_m;
+        $this->App_row_m = $ci->App_row_m;
         parent::__construct();
     }
 
     public function get_app($token)
     {
-        $app = $this->app_m->get_where('token', $token);
+        $app = $this->App_m->get_where('token', $token);
         return $app;
     }
 
     public function get_table($name)
     {
-        return $this->app_table_m->get_where('name', $name);
+        return $this->App_table_m->get_where('name', $name);
     }
 
     public function get_columns($table)
     {
-        $columns = $this->app_column_m->get_columns('table_id', $table->id);
+        $columns = $this->App_column_m->get_columns('table_id', $table->id);
         is_array($columns) || $columns = array($columns);
         return $columns;
     }

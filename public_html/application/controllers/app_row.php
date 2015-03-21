@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_row extends MY_Controller
+class App_row extends MY_Controller
 {
-    public $model = 'app_row_m';
+    public $model = 'App_row_m';
     public $load_model = TRUE;
     public $message = '';
     public $errors = array();
@@ -11,7 +11,7 @@ class app_row extends MY_Controller
     public function listing()
     {
         $this->set_message();
-        $listing = $this->app_row_m->listing();
+        $listing = $this->App_row_m->listing();
         $table = $this->input->get('app_table');
         $new = ($table) ? anchor(base_url('app_row?new=1&app_table=' . $table), icon('plus') . ' New app row') : '';
         $this->twig->render('admin/listing.twig', array(
@@ -26,7 +26,7 @@ class app_row extends MY_Controller
 
     public function create()
     {
-        $this->message = 'App Row created with ID: ' . $this->app_row_m->create();
+        $this->message = 'App Row created with ID: ' . $this->App_row_m->create();
         $this->listing();
     }
 
@@ -35,7 +35,7 @@ class app_row extends MY_Controller
         $create_new = create_new() || $new;
         if($id || $create_new)
         {
-            $form = $this->app_row_m->form($id, $create_new);
+            $form = $this->App_row_m->form($id, $create_new);
             $this->twig->render('admin/edit.twig', array(
                 'title'=>'Edit App Row',
                 'heading'=>icon('th-list') . ' App Rows',
@@ -52,7 +52,7 @@ class app_row extends MY_Controller
         $update = $id;
         if($update)
         {
-            $this->message = ($update) ? 'App Row updated! Affected rows: ' . $this->app_row_m->update($id) : $update;
+            $this->message = ($update) ? 'App Row updated! Affected rows: ' . $this->App_row_m->update($id) : $update;
             $this->listing();
         }else{
             $this->read($id);
@@ -62,17 +62,17 @@ class app_row extends MY_Controller
     public function delete($id = FALSE)
     {
         $delete = $id;
-        $this->message = ($delete) ? 'App Row deleted! Affected rows: ' . $this->app_row_m->delete($id) : $delete;
+        $this->message = ($delete) ? 'App Row deleted! Affected rows: ' . $this->App_row_m->delete($id) : $delete;
         $this->listing();
     }
 
     public function can_delete($str)
     {
-        $row = $this->app_row_m->get_where($str);
+        $row = $this->App_row_m->get_where($str);
         $ci =& get_instance();
-        $ci->load->model('app_table_m');
-        $app_table = $ci->app_table_m->get_where($row->app_table_id);
-        $num_rows = $this->app_row_m->get_num_rows($app_table);
+        $ci->load->model('App_table_m');
+        $app_table = $ci->App_table_m->get_where($row->app_table_id);
+        $num_rows = $this->App_row_m->get_num_rows($app_table);
         if($num_rows != 0)
         {
             $this->form_validation->set_message('can_delete', 'Cannot delete row on table with existing rows');

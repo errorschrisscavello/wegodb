@@ -1,22 +1,22 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class app_table_m extends MY_Model
+class App_table_m extends MY_Model
 {
     public $table = 'app_tables';
     public $post_filter = array(
         'name'=>'name',
         'app_id'=>'app'
     );
-    public $app_m;
-    public $app_column_m;
+    public $App_m;
+    public $App_column_m;
 
     function __construct()
     {
         $ci =& get_instance();
-        $ci->load->model('app_m');
-        $ci->load->model('app_column_m');
-        $this->app_m =& $ci->app_m;
-        $this->app_column_m =& $ci->app_column_m;
+        $ci->load->model('App_m');
+        $ci->load->model('App_column_m');
+        $this->App_m =& $ci->App_m;
+        $this->App_column_m =& $ci->App_column_m;
         parent::__construct();
     }
 
@@ -41,12 +41,12 @@ class app_table_m extends MY_Model
     public function delete($id = FALSE)
     {
         $app_table = $this->get_where($id);
-        $app_columns = $this->app_column_m->get_all_where('app_table_id', $id);
+        $app_columns = $this->App_column_m->get_all_where('app_table_id', $id);
         if($app_columns)
         {
             foreach($app_columns as $app_column)
             {
-                $this->app_column_m->delete($app_column->id);
+                $this->App_column_m->delete($app_column->id);
             }
         }
         $link_name = linked_table_name($app_table);
@@ -56,7 +56,7 @@ class app_table_m extends MY_Model
 
     public function form($id = FALSE, $new = FALSE)
     {
-        $apps = $this->app_m->get();
+        $apps = $this->App_m->get();
         ob_start();
         if($apps)
         {
@@ -85,7 +85,7 @@ class app_table_m extends MY_Model
                 ), '', form_control());
                 echo form_group_close();
 
-                $apps = $this->app_m->get();
+                $apps = $this->App_m->get();
                 $options = array();
                 $selected = $this->input->post('app');
                 foreach($apps as $app)
@@ -125,7 +125,7 @@ class app_table_m extends MY_Model
     {
         if($filtered = $app_id = $this->input->get('app'))
         {
-            $app = $this->app_m->get_where($app_id);
+            $app = $this->App_m->get_where($app_id);
             $app_tables = $this->get_where('app_id', $app->id);
             if($app_tables)
             {
@@ -160,7 +160,7 @@ class app_table_m extends MY_Model
                     <td><?php echo anchor(base_url('app_row/?app_table=' . $app_table->id), 'Rows'); ?></td>
                     <td><?php echo $app_table->name; ?></td>
                     <?php
-                    $app = $this->app_m->get_where($app_table->app_id);
+                    $app = $this->App_m->get_where($app_table->app_id);
                     $app_name = ($app) ? $app->name : 'No app selected';
                     ?>
                     <td><?php echo $app_name; ?></td>
