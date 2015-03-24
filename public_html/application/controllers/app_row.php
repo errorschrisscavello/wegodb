@@ -62,7 +62,7 @@ class App_row extends MY_Controller
     public function delete($id = FALSE)
     {
         $delete = $id;
-        $this->message = ($delete) ? 'App Row deleted! Affected rows: ' . $this->App_row_m->delete($id) : $delete;
+        $this->message = ($delete) ? 'App Row sent to Trash! Affected rows: ' . $this->App_row_m->delete($id) : $delete;
         $this->listing();
     }
 

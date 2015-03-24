@@ -104,9 +104,11 @@ class App_table_m extends MY_Model
                     'name'=>'app'
                 );
 
+                $disabled = ($new) ? '' : ' disabled="disabled"';
+
                 echo form_group_open();
                 echo form_label('App', 'app');
-                echo form_dropdown($data, $options, $selected, form_control());
+                echo form_dropdown($data, $options, $selected, form_control() . $disabled);
                 echo form_group_close();
 
                 echo form_submit('submit', 'Submit');

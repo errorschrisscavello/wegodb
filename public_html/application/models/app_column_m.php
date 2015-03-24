@@ -301,7 +301,7 @@ class App_column_m extends MY_Model
                     <td><?php echo form_delete('app_column', $app_column->id); ?></td>
                     <td><?php echo anchor(base_url('app_row/?app_table=' . $app_column->table_id), 'Rows'); ?></td>
                     <td><?php echo $app_column->name; ?></td>
-                    <td><?php echo $app_column->type; ?></td>
+                    <td><?php echo $this->c_type($app_column->type); ?></td>
                     <td><?php echo $app_column->num_rows; ?></td>
                     <td><?php echo $app_column->table_name; ?></td>
                     <td><?php echo $app_column->app_name; ?></td>
@@ -319,5 +319,14 @@ class App_column_m extends MY_Model
         <?php endif; ?>
         <?php
         return ob_get_clean();
+    }
+
+    public function c_type($mysql_type)
+    {
+        if($mysql_type == 'tinyint') return'Boolean';
+        if($mysql_type == 'bigint') return'Integer';
+        if($mysql_type == 'double') return'Float';
+        if($mysql_type == 'varchar') return'String';
+        if($mysql_type == 'text') return'Text';
     }
 }
