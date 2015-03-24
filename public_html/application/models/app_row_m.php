@@ -229,17 +229,21 @@ class App_row_m extends MY_Model
                 </table>
             <?php else: ?>
                 <p>No rows exist on table: <?php echo $app_table->name; ?>. Create a new row!</p>
-        <?php endif; ?>
+            <?php endif; ?>
         <?php elseif($app_tables): ?>
             <?php $apps = $this->App_m->get(); ?>
             <?php foreach($apps as $app): ?>
                 <?php $app_tables = $this->App_table_m->get_all_where('app_id', $app->id); ?>
                 <h3><?php echo icon('phone'); ?> App: <?php echo $app->name; ?></h3>
-                <ul class="list-group">
-                    <?php foreach($app_tables as $app_table): ?>
-                        <li class="list-group-item"><?php echo anchor(base_url('app_row?app_table=' . $app_table->id), icon('th-large') . ' ' . $app_table->name); ?></li>
-                    <?php endforeach; ?>
-                </ul>
+                <?php if($app_tables): ?>
+                    <ul class="list-group">
+                        <?php foreach($app_tables as $app_table): ?>
+                            <li class="list-group-item"><?php echo anchor(base_url('app_row?app_table=' . $app_table->id), icon('th-large') . ' ' . $app_table->name); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p>No tables found for App: <?php echo $app->name; ?></p>
+                <?endif; ?>
             <?php endforeach; ?>
         <?php else: ?>
             <p>No tables found. Create a table and add some columns and rows!</p>

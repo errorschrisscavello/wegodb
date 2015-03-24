@@ -16,7 +16,10 @@ class Api extends MY_Controller
         {
             if(isset($_POST['data']))
             {
-                $_POST['data'] = json_decode($_POST['data']);
+                if(is_string($_POST['data']))
+                {
+                    $_POST['data'] = json_decode($_POST['data']);
+                }
             }
             $this->Api_m->data = $_POST;
             $action = $this->Api_m->action();
