@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <title>Wego DB Documentation</title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+
+        <style>
+            section{
+                margin-top: 64px;
+                max-width: 768px;
+            }
+            h1,h2,h3,h4{
+                margin-top: 2em;
+                text-decoration: underline;
+            }
+            h1{
+                background: #999999;
+            }
+            h2{
+                background: #aaaaaa;
+                text-indent: 1em;
+            }
+            h3{
+                background: #bbbbbb;
+                text-indent: 2em;
+            }
+            h4{
+                background: #cccccc;
+                text-indent: 3em;
+            }
+            p{
+                text-indent: 2em;
+            }
+            p::before{
+                content:"-"
+            }
+            .img-responsive{
+                max-width: 90%;
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <a name="top"></a>
+        <!-- main -->
+        <main class="container">
+
+            <!-- nav -->
+            <header>
+                <nav class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#top">WegoDB</a>
+                        </div>
+                        <div id="navbar" class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a href="#installation" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Installation<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="dropdown-header">Server Requirements</li>
+                                        <li><a href="#requirements-file-permissions">File Permissions</a></li>
+                                        <li><a href="#requirements-php">PHP</a></li>
+                                        <li><a href="#requirements-mysql">MySQL</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">Install Tutorial</li>
+                                        <li><a href="#install">Getting to the install</a></li>
+                                        <li><a href="#install-db-create">Create a database</a></li>
+                                        <li><a href="#install-db-connect">Connect to the database</a></li>
+                                        <li><a href="#install-user-create">Create a user</a></li>
+                                        <li><a href="#install-user-activate">Activate the user</a></li>
+                                        <li><a href="#install-login">Login</a></li>
+                                        <li><a href="#install-reset">Oops I made a mistake, reset?</a></li>
+                                        <li><a href="#install-remove">Removing the installation files</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Admin Tasks<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="dropdown-header">Users</li>
+                                        <li><a href="#admin-user-create">Create a User</a></li>
+                                        <li><a href="#admin-user-activate">Activate a User</a></li>
+                                        <li><a href="#admin-user-edit">Edit a User</a></li>
+                                        <li><a href="#admin-user-delete">Delete a User</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">Apps</li>
+                                        <li><a href="#admin-app-create">Create an App</a></li>
+                                        <li><a href="#admin-app-edit">Edit an App</a></li>
+                                        <li><a href="#admin-app-delete">Delete an App</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">App Tables</li>
+                                        <li><a href="#admin-table-create">Create an App Table</a></li>
+                                        <li><a href="#admin-table-edit">Edit an App Table</a></li>
+                                        <li><a href="#admin-table-delete">Delete an App Table</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">App Columns</li>
+                                        <li><a href="#admin-column-create">Create an App Column</a></li>
+                                        <li><a href="#admin-column-edit">Edit an App Column</a></li>
+                                        <li><a href="#admin-column-delete">Delete an App Column</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">App Rows</li>
+                                        <li><a href="#admin-row-create">Create an App Row</a></li>
+                                        <li><a href="#admin-row-edit">Edit an App Row</a></li>
+                                        <li><a href="#admin-row-delete">Delete an App Row</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">Trash</li>
+                                        <li><a href="#admin-trash-restore">Restoring an item from Trash</a></li>
+                                        <li><a href="#admin-trash-delete">Deleting an item from Trash</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">My Account</li>
+                                        <li><a href="#admin-my">Viewing your account info</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">API Communication<span class="caret"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="dropdown-header">Connecting to the API</li>
+                                        <li><a href="#api-connect-location">API location</a></li>
+                                        <li><a href="#api-connect-auth">API authorization</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">Security</li>
+                                        <li><a href="#api-secure-csrf">CSRF: Cross Site Request Forgery</a></li>
+                                        <li><a href="#api-secure-token">App Tokens</a></li>
+
+                                        <li class="divider"></li>
+
+                                        <li class="dropdown-header">Performing API CRUD tasks</li>
+                                        <li><a href="#api-crud-create">Creating rows on a table</a></li>
+                                        <li><a href="#api-crud-read">Reading from tables</a></li>
+                                        <li><a href="#api-crud-update">Updating existing table rows</a></li>
+                                        <li><a href="#api-crud-delete">Deleting table rows</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+
+            <section>
+                <h1>WegoDB Documentation</h1>
+
+                <!-- installation -->
+                <a name="installation"></a>
+                <h2>Installation</h2>
+
+                <h3>Server Requirements</h3>
+
+                <a name="requirements-file-permissions"></a>
+                <h4>File Permissions</h4>
+                <p>If your webroot directory is not writable by the server you will get this message:</p>
+                <img src="images/requirements-permissions.png" alt="requirements permissions" class="img-responsive"/>
+                <p>In this case you must check your server settings and change the file/directory permissions such that WegoDB can write to the directory in which it is installed.</p>
+
+                <a name="requirements-php"></a>
+                <h4>PHP</h4>
+                <p>PHP 5.4+</p>
+                <p>WegoDB is a <a href="http://php.net">PHP</a> application and requires your server to have PHP installed.</p>
+                <p>Because WegoDB is built on top of <a href="http://codeigniter.com">CodeIgniter</a> is recommended to have PHP 5.4 or newer installed on your server. Check your server settings or PHP version with your hosting provider.</p>
+
+                <a name="requirements-mysql"></a>
+                <h4>MySQL</h4>
+                <p>MySQL 4.1+</p>
+                <p>WegoDB requires <a href="https://www.mysql.com">MySQL</a> to manage it's database. You must have MySQL installed on your server.</p>
+                <p>WegoDB uses the <a href="http://php.net/manual/en/book.mysqli.php">mysqli php extension</a> to communicate with MySQL. The extension should work with MySQL 4.1 or newer.</p>
+
+                <h3>Install Tutorial</h3>
+
+                <a name="install"></a>
+                <h4>Getting to the install</h4>
+                <p>First you should upload the contents of the WegoDB download to your webroot. In many cases this is a folder called <code>public_html</code> located in your server file system. Note that I say the contents! Do not upload the full directory to your webroot as you will not be able to navigate to the install as I am about to explain.</p>
+                <p>Next your must navigate to the install in your browser. This will be at the root of your domain. Example: <code>http://mydomain.com</code>. This should launch the installer and you will now see either a prompt for your database credentials or the permissions error explained
+                    <a href="#requirements-file-permissions">above</a></p>
+
+                <a name="install-db-create"></a>
+                <h4>Create a database</h4>
+                <p>The WegoDB installer will now ask you for your database credentials. These are the:</p>
+                <ul>
+                    <li><code>host</code>: the host name, in most cases this can be left to the default 'localhost'</li>
+                    <li><code>username</code>: a username you create for a user with permission to access the database</li>
+                    <li><code>password</code>: the password for the above user</li>
+                    <li><code>database</code>: the name of the database</li>
+                </ul>
+                <img src="images/install-database.png" alt="install database" class="img-responsive"/>
+                <div class="alert alert-danger">You must create a database and a user that has permission to manipulate it before running the install!</div>
+
+                <a name="install-db-connect"></a>
+                <h4>Connect to the database</h4>
+                <p>Upon successful connection to the database you will get this message:</p>
+                <img src="images/install-db-connect.png" alt="install db connect" class="img-responsive"/>
+                <p>If the connection was unsuccessful you will be redirected to the database form with an error message.</p>
+
+                <a name="install-user-create"></a>
+                <h4>Create a user</h4>
+                <p>Next the WegoDB installer will ask you to create a new user.</p>
+                <img src="images/install-user.png" alt="install user" class="img-responsive"/>
+                <div class="alert alert-danger">Double check your email before sending! An email WILL be sent with a required activation link! Otherwise you will not be able to login!</div>
+                <p>If your user credentials pass validation you will be prompted to activate the new user via your email. If not, you will be redirected to the user form with an error.</p>
+
+                <a name="install-user-activate"></a>
+                <h4>Activate the user</h4>
+                <p>After submitting the new user credentials you will get this message. At this point you must navigate to your email.</p>
+                <img src="images/install-activate.png" alt="install activate" class="img-responsive"/>
+                <p>You should see a message in your email that looks something like this:</p>
+                <img src="images/install-email.png" alt="install email" class="img-responsive"/>
+                <p>Click the provided link and this should trigger the activation of your newly created user. You should be directed to the login screen with this message:</p>
+                <img src="images/install-activated.png" alt="install activated" class="img-responsive"/>
+                <div class="alert alert-warning">If you do not see the activation message above you must click the link in your email again as the activation was not registered!</div>
+
+                <a name="install-login"></a>
+                <h4>Login</h4>
+                <p>At this point you may login with your newly created username or email and the password you provided.</p>
+                <a name="install-reset"></a>
+                <h4>Oops I made a mistake, reset?</h4>
+                <p>If for some reason during the install process something goes wrong you may reset the install by navigating to the url <code>http://yourdomainhere.com/reset.php</code>. This will reset the files and prepare WegoDB for a fresh install.</p>
+                <div class="alert alert-warning">If you created a database and wish to start with a fresh database you may have to delete the database manually as WegoDB does not have permission to delete the database on your shared hosting provider's server.</div>
+                <a name="install-remove"></a>
+                <h4>Removing the installation files</h4>
+                <p>After a successful install it is recommended that you delete the following files and folders as they are a security risk:</p>
+                <ul>
+                    <li><code>install.php</code></li>
+                    <li><code>reset.php</code></li>
+                    <li><code>/install/</code></li>
+                </ul>
+                <div class="alert alert-success">Install done!</div>
+
+                <!-- admin tasks -->
+                <a name="admin"></a>
+                <h2>Admin Tasks</h2>
+
+                <h3>Users</h3>
+
+                <a name="admin-user-create"></a>
+                <h4>Create a User</h4>
+                <p>If for some reason you wish to add a user or change user information you may do so in the users tab.</p>
+                <p>Simply click the <code>+ New user</code> button and follow the same steps from the <a href="#install-user-create">install</a> to create the user.</p>
+                <img src="images/user-table.png" alt="user table" class="img-responsive"/>
+                <p>You will see this form:</p>
+                <img src="images/user-create.png" alt="user create" class="img-responsive"/>
+
+                <a name="admin-user-activate"></a>
+                <h4>Activate a User</h4>
+                <p>After creating the new user you will be prompted to activate the new user just like in the <a
+                        href="#install-user-activate">install</a> and you must follow the same steps.</p>
+                <img src="images/user-created.png" alt="user created" class="img-responsive"/>
+                <a name="admin-user-edit"></a>
+                <h4>Edit a User</h4>
+                <p>Editing an existing user utilizes the same form as creating a new user. Change your username, email or update your password here!</p>
+                <img src="images/user-edit.png" alt="user edit" class="img-responsive"/>
+
+                <a name="admin-user-delete"></a>
+                <h4>Delete a User</h4>
+                <p>Deleting a user is as simple as clicking the <code>delete</code> button next to that user!</p>
+                <img src="images/user-deleted.png" alt="user deleted" class="img-responsive"/>
+                <div class="alert alert-warning">Note: you may not delete the only existing user!</div>
+
+                <h3>Apps</h3>
+
+                <a name="admin-app-create"></a>
+                <h4>Create an App</h4>
+                <p>Apps are the representation of your game/app in WegoDB. Create a new app by clicking the <code>+ New app</code> button.</p>
+                <img src="images/app-table.png" alt="app table" class="img-responsive"/>
+                <p>You will see this form:</p>
+                <p>Let's create a game and name it something clever like <code>my_game</code>.</p>
+                <img src="images/app-create.png" alt="app create" class="img-responsive"/>
+                <p>Name your app and submit! That is it!</p>
+                <img src="images/app-created.png" alt="app created" class="img-responsive"/>
+                <p>This generates an <code>API token</code> for your app as well as enables the creation of tables for the app!</p>
+                <img src="images/app-token.png" alt="app token" class="img-responsive"/>
+
+                <a name="admin-app-edit"></a>
+                <h4>Edit an App</h4>
+                <p>To edit an app click the <code>edit</code> button next to the app.</p>
+                <img src="images/app-created.png" alt="app created" class="img-responsive"/>
+                <p>You will now be able to edit the app's name!</p>
+                <img src="images/app-edit.png" alt="app edit" class="img-responsive"/>
+                <div class="alert alert-danger">Changing the name of the app WILL change it's API key. However, changing it BACK to the former name will restore the old API key.</div>
+
+                <a name="admin-app-delete"></a>
+                <h4>Delete an App</h4>
+                <p>Deleting an app is as simple as clicking the <code>delete</code> button next to the app!</p>
+                <img src="images/app-deleted.png" alt="app deleted" class="img-responsive"/>
+                <div class="alert alert-warning">Note: you cannot delete an app with attached tables!</div>
+
+                <h3>App Tables</h3>
+
+                <a name="admin-table-create"></a>
+                <h4>Create an App Table</h4>
+                <p>Tables are the places you store your data for an app. Creating a table is as easy as clicking the <code>+ New app table</code> button.</p>
+                <img src="images/table-table.png" alt="table table" class="img-responsive"/>
+                <p>You will see this form:</p>
+                <p>Select an app to create your table on and give it a meaningful name! In the case of a game you might want to store scores of the players so let's create one named <code>highscores</code>.</p>
+                <img src="images/table-create.png" alt="table create" class="img-responsive"/>
+                <p>Upon successful table creation you will see this message:</p>
+                <img src="images/table-created.png" alt="table created" class="img-responsive"/>
+
+                <a name="admin-table-edit"></a>
+                <h4>Edit an App Table</h4>
+                <p>Click the <code>edit</code> button next to the table you wish to edit.</p>
+                <img src="images/table-created.png" alt="table created" class="img-responsive"/>
+                <p>The edit table form is the same as the create table form, but allows you to alter the table name.</p>
+                <img src="images/table-edit.png" alt="table edit" class="img-responsive"/>
+                <div class="alert alert-warning">Warning: you may not change the linked app of a table once it is created. Make sure your table is linked to the correct app before you start adding columns and rows!</div>
+
+                <a name="admin-table-delete"></a>
+                <h4>Delete an App Table</h4>
+                <p>To delete a table simply click the <code>delete</code> button next to the table you wish to delete.</p>
+                <img src="images/table-deleted.png" alt="table deleted" class="img-responsive"/>
+                <div class="alert alert-warning">Note: you cannot delete a table with existing columns!</div>
+
+                <h3>App Columns</h3>
+
+                <a name="admin-column-create"></a>
+                <h4>Create an App Column</h4>
+                <p>Columns are the types of data you can store on a table. You can give your column a name and select from a number of data types.</p>
+                <p>To create a column click the <code>+ New app column</code> button.</p>
+                <img src="images/column-table.png" alt="column table" class="img-responsive"/>
+                <p>Next you will need to give your column a name and select a data type for it. In the case of wanting to store high scores for a game you would want a <code>player</code> column with a type of <code>string</code> and a <code>score</code> column with a type of <code>integer</code>.</p>
+                <img src="images/column-create-player.png" alt="column create player" class="img-responsive"/>
+                <img src="images/column-create-score.png" alt="column create score" class="img-responsive"/>
+                <p>After successfully creating each column you should see a message like this:</p>
+                <img src="images/column-created.png" alt="column created" class="img-responsive"/>
+
+                <a name="admin-column-edit"></a>
+                <h4>Edit an App Column</h4>
+                <div class="alert alert-warning">Editing a column is not enabled by default. Instead you must create a new column and delete the old one.</div>
+
+                <a name="admin-column-delete"></a>
+                <h4>Delete an App Column</h4>
+                <p>Delete a column by clicking the <code>delete</code> button next to the column in the listing.</p>
+                <img src="images/column-created.png" alt="column created" class="img-responsive"/>
+                <p>You will then see this message:</p>
+                <img src="images/column-deleted.png" alt="column deleted" class="img-responsive"/>
+
+                <h3>App Rows</h3>
+
+                <a name="admin-row-create"></a>
+                <h4>Create an App Row</h4>
+                <p>Rows are the instances of your data. In the case of our game with the table <code>highscores</code>, these are the records of each player's name in the column <code>player</code> and that player's score in the column <code>score</code>.</p>
+                <p>Upon navigating to the <code>App Rows</code> view you will see a list of apps and the tables created for them.</p>
+                <img src="images/row-apps.png" alt="row apps" class="img-responsive"/>
+                <p>Click on a table to display it's rows.</p>
+                <p>From here you may create a new row by clicking the <code>+ New app row</code> button.</p>
+                <img src="images/row-app-table.png" alt="row app table" class="img-responsive"/>
+                <p>This will display a form that allows you to insert values for the columns of the given table. In our case this is <code>player</code> and <code>score</code>.</p>
+                <img src="images/row-create.png" alt="row create" class="img-responsive"/>
+                <p>Upon successful creation you will see this message:</p>
+                <img src="images/row-created.png" alt="row created" class="img-responsive"/>
+
+                <a name="admin-row-edit"></a>
+                <h4>Edit an App Row</h4>
+                <p>To edit a row click the <code>edit</code> button next to the row in the listing.</p>
+                <img src="images/row-created.png" alt="row created" class="img-responsive"/>
+                <p>Now you can edit the row with the given form.</p>
+                <img src="images/row-edit.png" alt="row edit" class="img-responsive"/>
+
+                <a name="admin-row-delete"></a>
+                <h4>Delete an App Row</h4>
+                <p>Deleting a row via the <code>trash</code> button moves it to the trash. This allows it to be restored if the delete was a mistake.</p>
+                <img src="images/row-deleted.png" alt="row deleted" class="img-responsive"/>
+
+                <h3>Trash</h3>
+
+                <a name="admin-trash-restore"></a>
+                <h4>Restoring an item from Trash</h4>
+                <p>Viewing the trash will show you all the rows currently in the trash bin.</p>
+                <img src="images/trash-table.png" alt="trash table" class="img-responsive"/>
+                <p>To restore an item simply click the <code>restore</code> button next to it. Add you will see this message:</p>
+                <img src="images/trash-restored.png" alt="trash restored" class="img-responsive"/>
+
+                <a name="admin-trash-delete"></a>
+                <h4>Deleting an item from Trash</h4>
+                <p>Deleting a row from the trash deletes it <em>permanently</em>! So be careful here! Click the <code>delete</code> button next to the item to delete it.</p>
+                <img src="images/trash-deleted.png" alt="trash deleted" class="img-responsive"/>
+
+                <h3>My Account</h3>
+
+                <a name="admin-my"></a>
+                <h4>Viewing your account info</h4>
+                <p>To view/edit your account info (username, email, password) click the <code>My Account</code> button in the main navigation. You will be directed to the edit form:</p>
+                <img src="images/myaccount.png" alt="my account" class="img-responsive"/>
+
+                <!-- api communication -->
+                <a name="api"></a>
+                <h2>API Communication</h2>
+
+                <h3>Connection to the API</h3>
+
+                <a name="api-connect-location"></a>
+                <h4>API location</h4>
+                <p>The API is located at the uri <code>/api</code> relative to your main domain. So if your domain were <code>http://example.com</code> the API would be located at <code>http://example.com/api</code>.</p>
+
+                <a name="api-connect-auth"></a>
+                <h4>API authorization</h4>
+                <p>WegoDB uses <a href="#api-secure-csrf">CSRF protection</a> and an <a href="#api-secure-token">app access token</a> to authorize requests made to it's API. Both of these must be present in every request made to the API minus the request made to get the CSRF token. See the section on
+                    <a href="#api-secure-token">security</a>.</p>
+
+                <h3>Security</h3>
+
+                <a name="api-secure-csrf"></a>
+                <h4>CSRF: Cross Site Request Forgery</h4>
+                <p>A <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">Cross Site Request Forgery</a> is a request made from a malicious script or hacker trying to manipulate sensitive information via a trusted source. In this case the information is your database for your app. The source could be from the hacker's browser, commandline or pretty much anything that sends HTTP requests!</p>
+                <p>WegoDB is meant to be used for small apps and games. It is understood that these could probably be coded in
+                    <a href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a>. Because JavaScript is plainly viewable in your browser's developer tools, it is possible for a hacker to view your stored
+                    <a href="#api-secure-token">app token</a>. This is why WegoDB uses a Cross Site Request Forgery token or CSRF token for short.</p>
+                <p>This token can be accessed through the url <code>http://youdomainhere.com/api/csrf</code>. This will output the CSRF token. This token can be saved to a variable and kept relatively secret.</p>
+                <p>Here is an example of how to get your CSRF token from WegoDB and store it for later use. This example uses
+                    <a href="https://jquery.com">jQuery</a> <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a> to make the request via JavaScript.</p>
+                <pre class="prettyprint linenums">//Declare global variable to hold the CSRF token
+var csrf = '';
+
+//Send AJAX request via jQuery
+$.ajax({
+
+    //Set the target URL
+    url:'http://yourdomainhere.com/api/csrf/',
+
+    //Set the request type
+    type:'GET',
+
+    //Add an onSuccess event handler
+    success:function(response, status, request){
+
+        //Parse the response to JSON
+        var json = JSON.parse(response);
+
+        //Set the CSRF variable to the reponse data property
+        csrf = json.data;
+
+        //Log the CSRF token to view the request was successful
+        console.log('success: ', csrf);
+    },
+
+    //Always good practice to set error and complete event handlers for debugging etc...
+    complete:function(request, status){console.log('complete: ', status);},
+    error:function(request, status, error){console.log('error: ', error);}
+});</pre>
+                <p>This of course is a very straight forward example. In practice you should most likely store this token in a constant or class to be reused in each request made to the API.</p>
+
+                <a name="api-secure-token"></a>
+                <h4>App Tokens</h4>
+                <p>Your app token is WegoDB's way of authorizing and identifying your app/game. It is a unique token generated from a unique string of text created during every WegoDB install and the name of your app. This provides extra security as no 2 WegoDB installs will have the same app token for like app names.</p>
+                <p>App tokens must be included in every request made to the API minus the request to obtain the <a
+                        href="#api-secure-csrf">CSRF token</a>.</p>
+                <p>Here is an example request with an app token and csrf set using <a href="https://jquery.com">jQuery</a> <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a>:</p>
+                <pre class="prettyprint linenums">//Store your app token in a variable
+var appToken = '85323add6f4c2f548d9aadb1b42c5b39c247876237efac1100a407d7021f3bb7d846f1ce4ce93069c84fff4c8098b449658bc230c2e7bdb6a13e6ea4739b72fd';
+
+//Set the POST data to contain keys named 'csrf' and 'token'
+var data = {
+
+    //The csrf is the csrf token you retrieve from http://yourdomainhere.com/api/csrf
+    csrf:csrf,
+
+    //The token is your app token from the WegoDB admin app table
+    token:appToken
+};
+
+//Send the AJAX request
+$.ajax({
+
+    //Set the target URL
+    url:'http://yourdomainhere.com/api/',
+
+    //Set the request type to POST
+    type:'POST',
+
+    //You must send the your POST data to the API
+    data:data,
+
+    //Add event handlers for processing the response
+    success:function(response, status, request){console.log('success: ', response);},
+    complete:function(request, status){console.log('complete: ', status);},
+    error:function(request, status, error){console.log('error: ', error);}
+});</pre>
+                <p>The response you will receive will always have these 3 keys:</p>
+                <ul>
+                    <li><code>data</code>: the requested data from the database (empty if not a 'read' action)</li>
+                    <li><code>message</code>: a string message (may be an error message too)</li>
+                    <li><code>status</code>: either 'success' or 'error'</li>
+                </ul>
+                <div class="alert alert-warning">The 'status' will appear as 'success' even if the POST request was not formatted correctly. This is because the request was successfully received, however your POST data was given incorrectly, in which case there will be a message with how to reformat your data.</div>
+
+                <h3>Performing API CRUD tasks</h3>
+
+                <a name="api-crud-create"></a>
+                <h4>Creating rows on a table</h4>
+                <p><a href="http://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a> tasks are the standard operations that every database application must perform to manage it's information. WegoDB allows you to perform these basic operations via the admin and API.</p>
+                <p>The API allows you to create a row on a given table via a <a href="http://en.wikipedia.org/wiki/POST_(HTTP)">HTTP POST</a> request. The data meant to be stored in the newly created row must exist in the POST request in a key called <code>data</code>. It is recommended that you set all values for a given row that you did not give defaults in the admin form.</p>
+                <p>You must also set a POST key called <code>table</code> set to the table you want to perform tasks on as well as an <code>action</code> key telling the API which action you wish to perform.</p>
+                <p>There are four types of <code>actions</code>:</p>
+                <ul>
+                    <li><code>create</code>: insert a new row into a table</li>
+                    <li><code>read</code>: read rows from a table</li>
+                    <li><code>update</code>: update existing rows on a table</li>
+                    <li><code>delete</code>: delete rows from a table</li>
+                </ul>
+                <p>Here is an example creating a new row on the <code>highscores</code> table created in the <a
+                        href="#admin-table-create">table create</a> section of this documentation using <a href="https://jquery.com">jQuery</a> <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a>:</p>
+                <pre class="prettyprint linenums">//Set the data object
+var create = {
+
+    //Include the csrf and app token
+    csrf:csrf,
+    token:token,
+
+    //Set the table on which to create the new row
+    table:'highscores',
+
+    //Set the action to 'create'
+    action:'create',
+
+    //Set the data to be inserted into the new row
+    data:{
+        player: 'George',
+        score: 1234
+    }
+};
+
+//Send the AJAX request
+$.ajax({
+
+    //Set the target URL
+    url:'http://yourdomainhere.com/api/',
+
+    //Set the request type to POST
+    type:'POST',
+
+    //You must send the your POST data to the API
+    data:create,
+
+    //Add event handlers for processing the response
+    success:function(response, status, request){console.log('success: ', response);},
+    complete:function(request, status){console.log('complete: ', status);},
+    error:function(request, status, error){console.log('error: ', error);}
+});</pre>
+                <p>If your request was successful you should receive a response that reads something like <code>{"data":[],"message":"New row inserted with ID: 4","status":"success"}</code>. If not check to make sure your CSRF token and app token are correct, your POST data is formatted correctly as well as your action is set and spelled correctly.</p>
+
+                <a name="api-crud-read"></a>
+                <h4>Reading from tables</h4>
+                <p>Reading data from a table is simple in the WegoDB API and if you have any experience with <a
+                        href="http://en.wikipedia.org/wiki/SQL">SQL</a> you will have no problem adapting to it.</p>
+                <p>WegoDB allows you to read all of the rows in a given table by default. This means if you do not set a <code>limit</code> you will receive all of the rows that exist on the table at the time of your request. If you wish to receive a certain number of rows you must set a <code>limit</code> in your POST data. If you wish the rows to be in a specific order by a column you must include a <code>order_by</code> key in your POST data.</p>
+                <p>A <code>limit</code> must be set to an integer while an <code>order_by</code> is a pair of arguments separated by a coma. The first argument must be the name of a column on the table. The second is one of 2 directions to order by: <code>ASC</code> (ascending) or <code>DESC</code> (descending). An order of <code>ASC</code> will return the lowest results first and highest last while an order of <code>DESC</code> will do the opposite.</p>
+                <p>Here is an example reading rows on the <code>highscores</code> table created in the <a
+                        href="#admin-table-create">table create</a> section of this documentation using <a href="https://jquery.com">jQuery</a> <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a>:</p>
+                <pre class="prettyprint linenums">//Set the table to read from
+var table = 'highscores';
+
+//Set the data object for a general read action
+var read = {
+    csrf:csrf,
+    token:token,
+    table:table,
+    action:'read'
+};
+
+//Set the data object for a read action with a 'LIMIT' statement
+var readLimit = {
+    csrf:csrf,
+    token:token,
+    table:table,
+    action:'read',
+    limit:2
+};
+
+//Set a data object for a read action with an 'ORDER BY' statement
+var readOrderBy = {
+    csrf:csrf,
+    token:token,
+    table:table,
+    action:'read',
+    order_by:'score,DESC'
+};
+
+//Set a data object for a read action with a 'LIMIT' and 'ORDER BY' statement
+var readLimitOrderBy = {
+    csrf:csrf,
+    token:token,
+    table:table,
+    action:'read',
+    limit:1,
+    order_by:'score,ASC'
+};
+
+//Create a function wrapper for the ajax request
+function ajax(data)
+{
+    //Send the AJAX request
+    $.ajax({
+
+        //Set the target URL
+        url:'http://yourdomainhere.com/api/',
+
+        //Set the request type to POST
+        type:'POST',
+
+        //You must send the your POST data to the API
+        data:data,
+
+        //Add event handlers for processing the response
+        success:function(response, status, request){console.log('success: ', response);},
+        complete:function(request, status){console.log('complete: ', status);},
+        error:function(request, status, error){console.log('error: ', error);}
+    });
+}
+
+//Send an ajax request for each data object
+ajax(read);
+ajax(readLimit);
+ajax(readOrderBy);
+ajax(readLimitOrderBy);</pre>
+                <p>If your request was processed successfully you will receive a response that looks something like this: <code>{"data":[{"id":"4","player":"'George'","score":"1234"}],"message":"Completed action: read","status":"success"}</code>. If not check to make sure your CSRF token and app token are correct, your POST data is formatted correctly as well as your action is set and spelled correctly.</p>
+
+                <a name="api-crud-update"></a>
+                <h4>Updating existing table rows</h4>
+                <p>Updating rows with the WegoDB API is done completely with a row's <code>id</code>. You will notice that an <code>id</code> exists on every row that you receive in the data from the <code>read</code> action. This can be used to reference the row in an <code>update</code> action through the use of a <code>where</code> key in your POST data. The <code>where</code> must be set to the <code>id</code> of the row you wish to update.</p>
+                <p>You will notice the <code>id</code> is always going to be an integer greater than 0. You will also notice that when updating rows you only need to include the specific data you wish to update. This means you may exclude values for columns you want to leave unaltered.</p>
+                <p>Here is an example updating a row on the <code>highscores</code> table created in the <a
+                        href="#admin-table-create">table create</a> section of this documentation using <a href="https://jquery.com">jQuery</a> <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a>:</p>
+                <pre class="prettyprint linenums">//Set your POST data
+var update = {
+
+    //Include the csrf and app tokens
+    csrf:csrf,
+    token:token,
+
+    //Set the table on which to update the row
+    table:'highscores',
+
+    //Set the action to update
+    action:'update',
+
+    //Set your data to update the row with
+    data:{
+        player:'George Updated'
+    },
+
+    //Set the id of the row to update
+    where:1
+};
+
+//Send the AJAX request
+$.ajax({
+
+    //Set the target URL
+    url:'http://yourdomainhere.com/api/',
+
+    //Set the request type to POST
+    type:'POST',
+
+    //You must send the your POST data to the API
+    data:update,
+
+    //Add event handlers for processing the response
+    success:function(response, status, request){console.log('success: ', response);},
+    complete:function(request, status){console.log('complete: ', status);},
+    error:function(request, status, error){console.log('error: ', error);}
+});</pre>
+                <p>If your update request was successful you should receive a response like: <code>{"data":[],"message":"Updated row with ID: 4","status":"success"}</code>. If not check to make sure your CSRF token and app token are correct, your POST data is formatted correctly as well as your action is set and spelled correctly.</p>
+
+                <a name="api-crud-delete"></a>
+                <h4>Deleting table rows</h4>
+                <p>Finally, deleting rows in WegoDB is also done completely with the row's <code>id</code>. You will notice that an <code>id</code> exists on every row that you receive in the data from the <code>read</code> action. This can be used to reference the row in an <code>delete</code> action through the use of a <code>where</code> key in your POST data. The <code>where</code> must be set to the <code>id</code> of the row you wish to delete.</p>
+                <p>You will notice the <code>id</code> is always going to be an integer greater than 0.</p>
+                <p>It is also important to note that deletion via the API merely sends the row to the admin <code>trash</code>. To <em>permanently</em> delete a row it must be deleted in the admin <code>trash</code> panel. This is an extra security step to ensure that deletion only occurs when the author truly wants it.</p>
+                <div class="alert alert-danger">
+                    Warning: the word delete in JavaScript and other programming languages is a keyword! It is recommended you use another word like destroy to avoid an error when creating variables, keys, functions etc...!
+                </div>
+                <p>Here is an example deleting a row on the <code>highscores</code> table created in the <a
+                        href="#admin-table-create">table create</a> section of this documentation using <a href="https://jquery.com">jQuery</a> <a href="http://en.wikipedia.org/wiki/Ajax_(programming)">AJAX</a>:</p>
+                <pre class="prettyprint linenums">//Set your post data
+var destroy = {
+
+    //Include the csrf and app tokens
+    csrf:csrf,
+    token:token,
+
+    //Set the table for the row you wish to delete
+    table:'highscores',
+
+    //Set the action to delete
+    action:'delete',
+
+    //Set the id of the row you wish to delete
+    where:1
+};
+
+//Send the AJAX request
+$.ajax({
+
+    //Set the target URL
+    url:'http://yourdomainhere.com/api/',
+
+    //Set the request type to POST
+    type:'POST',
+
+    //You must send the your POST data to the API
+    data:destroy,
+
+    //Add event handlers for processing the response
+    success:function(response, status, request){console.log('success: ', response);},
+    complete:function(request, status){console.log('complete: ', status);},
+    error:function(request, status, error){console.log('error: ', error);}
+});</pre>
+                <p>If your delete request was successful you should receive a response like: <code>{"data":[],"message":"Deleted row with ID: 3","status":"success"}</code>. If not check to make sure your CSRF token and app token are correct, your POST data is formatted correctly as well as your action is set and spelled correctly.</p>
+            </section>
+
+            <footer>
+                <hr/>
+            </footer>
+        </main>
+    </body>
+</html>
