@@ -6,7 +6,7 @@
 {% block content %}
     <div class="jumbotron">
         <h1>Welcome to WegoDB {{ icon('user')|raw }} <span style="color: #428bca;">{{ user() }}</span>!</h1>
-        <p>Create databases for your games/apps and communicate with them through the <a href="#">WegoDB API</a>!</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">View the WegoDB API documentation</a></p>
+        <p>Create databases for your games/apps and communicate with them through the <a href="{{ "#{base_url}docs/index.html#api-connect-location" }}">WegoDB API</a>!</p>
+        <p><a class="btn btn-primary btn-lg" href="{{ "#{base_url}docs/index.html" }}" role="button">View the WegoDB API documentation</a></p>
     </div>
 {% endblock %}
